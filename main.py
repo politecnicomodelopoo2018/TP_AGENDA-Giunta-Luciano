@@ -1,20 +1,22 @@
-import os
-os.environ['KIVY_GL_BACKEND'] = 'sdl2'
-
-from kivy.core.window import Window
-import kivy
-
-kivy.require('1.10.1') # replace with your current kivy version !
-
 from kivy.app import App
-from kivy.uix.label import Label
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
 
+Builder.load_file('testapp.kv')
 
-class MyApp(App):
+class MenuScreen(Screen):
+    pass
+class SettingsScreen(Screen):
+    pass
 
+# Create the screen manager
+sm = ScreenManager()
+sm.add_widget(MenuScreen(name='menu'))
+sm.add_widget(SettingsScreen(name='settings'))
+
+class TestApp(App):
     def build(self):
-        return Label(text='PUM')
-
+        return sm
 
 if __name__ == '__main__':
-    MyApp().run()
+    TestApp().run()
