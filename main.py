@@ -1,22 +1,27 @@
 from kivy.app import App
+from kivy.uix.button import Button
+from kivy.properties import StringProperty
+
+
+class IconButton(Button):
+    icon = StringProperty("Faraona.jpg")
+
+# you can alos just put this in your KV file
 from kivy.lang import Builder
-from kivy.uix.screenmanager import ScreenManager, Screen
+Builder.load_string("""
+<IconButton>:
+    canvas:
+        Rectangle:
+            source:self.icon
+            pos: self.pos
+            size: self.size
+""")
 
-Builder.load_file('testapp.kv')
-
-class MenuScreen(Screen):
-    pass
-class SettingsScreen(Screen):
-    pass
-
-# Create the screen manager
-sm = ScreenManager()
-sm.add_widget(MenuScreen(name='menu'))
-sm.add_widget(SettingsScreen(name='settings'))
 
 class TestApp(App):
     def build(self):
-        return sm
+        return IconButton()
 
-if __name__ == '__main__':
+
+if __name__ in ("__main__", "android"):
     TestApp().run()

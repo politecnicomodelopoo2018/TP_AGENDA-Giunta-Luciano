@@ -8,9 +8,12 @@ from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
+from kivy.uix.button import Button
 from kivy.uix.anchorlayout import AnchorLayout
+from kivy.properties import StringProperty
 
 Builder.load_file('screenmanagerapp.kv')
+
 
 class PantallaGeneral(Screen):
     pass
