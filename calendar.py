@@ -25,9 +25,9 @@ class MisDatos(Screen):
         super(MisDatos, self).__init__(**kwargs)
         self.ids.label1.text = "MIS DATOS"
         self.ids.button1.background_normal = "Faraona.jpg"
-        nombre = self.ids.caja.text
-        self.ids.label2.text = nombre
-        print(self.ids.caja.text)
+        self.ids.button_textinput.text = "Print"
+    def PrintLabel(self, evt=None):
+        self.ids.label2.text = self.ids.caja.text
 class Contactos(Screen):
     pass
 
