@@ -1,27 +1,17 @@
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.properties import StringProperty
-
-
-class IconButton(Button):
-    icon = StringProperty("Faraona.jpg")
-
-# you can alos just put this in your KV file
+from kivy.uix.textinput import TextInput
 from kivy.lang import Builder
-Builder.load_string("""
-<IconButton>:
-    canvas:
-        Rectangle:
-            source:self.icon
-            pos: self.pos
-            size: self.size
-""")
+Builder.load_file('mainapp.kv')
 
+class TextInput(TextInput):
+    pass
 
-class TestApp(App):
+class MainApp(App):
     def build(self):
-        return IconButton()
+        return TextInput()
 
 
 if __name__ in ("__main__", "android"):
-    TestApp().run()
+    MainApp().run()
