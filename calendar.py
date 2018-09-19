@@ -21,6 +21,7 @@ class MisDatos(Screen):
         super(MisDatos, self).__init__(**kwargs)
         self.ids.label1.text = "MIS DATOS"
         self.ids.button1.background_normal = "Faraona.jpg"
+        self.ids.foto.background_normal = "Camila.jpeg"
         self.SetearDatosInput()
 
     def SetearDatosInput(self):
@@ -37,6 +38,7 @@ class MisDatos(Screen):
         self.ids.t_estado_civil.text = agenda.estado_civil
         self.ids.t_grupo_sanguineo.text = agenda.grupo_sanguineo
         self.ids.t_mail.text = agenda.mail
+
     def DisabledInputs(self, evt=None):
         self.ids.t_dni.disabled = True
         self.ids.t_apellido.disabled = True
@@ -70,8 +72,17 @@ class MisDatos(Screen):
     def UpdateCosas(self):
         agenda.SetAgenda(self.ids.t_nombre.text, self.ids.t_apellido.text, self.ids.t_dni.text, self.ids.t_grupo_sanguineo.text, self.ids.t_telefono.text, self.ids.t_celular.text, self.ids.t_mail.text, self.ids.t_direccion.text, self.ids.t_signo.text, self.ids.t_telefono_urgencia.text, self.ids.t_nacimiento.text, self.ids.t_estado_civil.text, self.ids.t_obra_social.text)
         agenda.UpdateDueno(1)
+
 class Contactos(Screen):
     pass
+
+class NuevoContacto(Screen):
+    def __init__(self, **kwargs):
+        super(NuevoContacto, self).__init__(**kwargs)
+        self.ids.label_nuevocontacto.text = "NUEVO CONTACTO"
+
+
+
 
 class Feriados(Screen):
     pass
@@ -81,6 +92,7 @@ root.add_widget(PantallaGeneral(name='PantallaGeneral'))
 root.add_widget(MisDatos(name='Mis Datos'))
 root.add_widget(Contactos(name='Contactos'))
 root.add_widget(Feriados(name='Feriados'))
+root.add_widget(NuevoContacto(name='NuevoContacto'))
 
 
 '''
