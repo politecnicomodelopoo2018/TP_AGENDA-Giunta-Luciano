@@ -1,0 +1,328 @@
+<PantallaGeneral>
+    canvas:
+        Color:
+            rgb: 0,0,0
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    orientation: 'vertical'
+    BoxLayout: #Box con los botones
+        size_hint:  .3,1
+        canvas:
+            Color:
+                rgb: 0,0,1
+
+        GridLayout: #grid con los botones y foto
+            rows: 5
+            BoxLayout: #foto + name
+                size_hint: .6, 1
+                canvas:
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                Label:
+                    size: root.size
+                    text_size: cm(6), cm(4)
+                    text:'Nombre aki ahre xd'
+                    font_size:'20sp'
+
+            Button: #boton mis datos
+                size_hint_x: .7
+                size_hint_y: .5
+                text: "Mis Datos"
+                on_release: root.manager.current = 'Mis Datos'
+            Button: #boton contactos
+                size_hint_x: .7
+                size_hint_y: .5
+                text: "Contactos"
+                on_release: root.manager.current = 'Contactos'
+            Button: #boton feriados
+                size_hint_x: .7
+                size_hint_y: .5
+                text: "Feriados"
+                on_release: root.manager.current = 'Feriados'
+            BoxLayout: #cosas
+                size_hint: .33, 1
+                canvas:
+                    Color:
+                        rgb: 1,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+    BoxLayout:
+        size_hint: .7, 1
+        canvas:
+            Color:
+                rgb: 1,0,0
+        AnchorLayout: #boton volver
+            anchor_x: "left"
+            anchor_y: "top"
+            canvas:
+
+<MisDatos>
+    canvas:
+        Color:
+            rgb: 1,1,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    GridLayout: #Grid que separa encabezado y body
+        rows: 2
+        GridLayout: #Grid que separa boton de titulo
+            size_hint_x:1
+            size_hint_y:.2
+            cols:2
+            AnchorLayout: #Anchor del boton
+                anchor_x: "left"
+                anchor_y: "top"
+                padding: 20,20,20,20
+                size_hint_x: .2
+                size_hint_y: 1
+                canvas:
+                    Color:
+                        rgb: 1,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                Button: #Boton para regresar
+                    id: button1
+                    size_hint_x:1
+                    size_hint_y: 1
+                    on_release: root.manager.current = 'PantallaGeneral'
+
+
+
+            BoxLayout: #Box del titulo
+                canvas:
+                    Color:
+                        rgb: 1,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                Label: #Titulo
+                    id: label1
+                    size: root.size
+                    text_size: cm(15), cm(2)
+                    font_size:'60sp'
+        GridLayout: #Grid que separa el body en 2
+            size_hint_x:1
+            size_hint_y:.8
+            cols: 2
+            GridLayout: #Informacion del usuario
+                rows: 13
+                size_hint_x: .70
+                size_hint_y: 1
+                canvas:
+                    Color:
+                        rgb: 0,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+        # DATOS (13)
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: 'DNI'
+                        canvas.before:
+                            Color:
+                                rgb: 0,0,0
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+
+                    TextInput: #DNI
+                        id: t_dni
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: 'NOMBRE '
+                        canvas.before:
+                            Color:
+                                rgb: 0,0,0
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                    TextInput: #NOMBRE
+                        id: t_nombre
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: 'APELLIDO'
+                    TextInput: #APELLIDO
+                        id: t_apellido
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "GRUPO SANGUINEO "
+                    TextInput: #GRUPO_SANGUINEO
+                        id: t_grupo_sanguineo
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "TELEFONO "
+                    TextInput: #TELEFONO
+                        id: t_telefono
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "CELULAR "
+                    TextInput: #CELULAR
+                        id: t_celular
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "MAIL "
+                    TextInput: #MAIL
+                        id: t_mail
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "DIRECCION "
+                    TextInput: #DIRECCION
+                        id: t_direccion
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "SIGNO "
+                    TextInput: #SIGNO
+                        id: t_signo
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "TELEFONO_URGENCIA "
+                    TextInput: #TELEFONO_URGENCIA
+                        id: t_telefono_urgencia
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "NACIMIENTO "
+                    TextInput: #NACIMIENTO
+                        id: t_nacimiento
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "ESTADO_CIVIL "
+                    TextInput: #ESTADO_CIVIL
+                        id: t_estado_civil
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+                GridLayout:
+                    cols: 2
+                    Label:
+                        size_hint: .2, 1
+                        text: "OBRA_SOCIAL "
+                    TextInput: #OBRA_SOCIAL
+                        id: t_obra_social
+                        size_hint: .3,.2
+                        multiline: False
+                        on_text_validate: on_enter
+                        disabled: True
+
+            #celeste
+            BoxLayout: #Foto del usuario + botones
+                size_hint_x: .30
+                size_hint_y: 1
+                canvas:
+                    Color:
+                        rgb: 0,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+                GridLayout: #Separacion foto y botones
+                    rows:2
+                    AnchorLayout: #Foto
+                        anchor_x: 'center'
+                        anchor_y: 'top'
+                        size_hint: 1,.8
+                        canvas:
+                            Color:
+                                rgb: 1,1,0
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        BoxLayout:
+                            size_hint : None, None
+                            canvas:
+                                Color:
+                                    rgb: 1,1,1
+                                Ellipse:
+                                    pos: self.pos
+                                    size: 50, 50
+
+
+                    GridLayout: #Botones
+                        cols:2
+                        size_hint: 1,.2
+                        padding: 20,20,20,20
+                        BoxLayout:
+                            padding:0,0,10,0
+                            Button: #Editar boton
+                                id: BotonEditar
+                                text: 'Editar'
+                                on_press: root.EnableInputs()
+                        BoxLayout:
+                            padding:10,0,0,0
+                            Button:
+                                id: BotonGuardar
+                                text: 'Guardar'
+                                on_press: root.DisabledInputs()
+                                on_press: root.UpdateCosas()
