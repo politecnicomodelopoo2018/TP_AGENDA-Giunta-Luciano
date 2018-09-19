@@ -300,13 +300,14 @@
                                 size: self.size
                                 pos: self.pos
                         BoxLayout:
+                            id: foto
                             size_hint : None, None
                             canvas:
                                 Color:
                                     rgb: 1,1,1
                                 Ellipse:
                                     pos: self.pos
-                                    size: 50, 50
+                                    size: 200, 200
 
 
                     GridLayout: #Botones
@@ -326,3 +327,335 @@
                                 text: 'Guardar'
                                 on_press: root.DisabledInputs()
                                 on_press: root.UpdateCosas()
+
+
+<Contactos>
+    canvas:
+        Color:
+            rgb: 1,1,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    GridLayout:
+        rows: 3
+        canvas:
+            Color:
+                rgb: 1,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        Button: #Nuevo contacto ---> a nuevo NuevoContacto
+            id: agregar_contacto
+            text: "Agregar Contacto uwu (estas en contactos)"
+            size_hint_x:.3
+            size_hint_y: .3
+            on_release: root.manager.current = 'NuevoContacto'
+        Button: #Detalles contacto ---> a DetallesContacto
+            id: detalles_contacto
+            text: "Ver detalles del contacto owo"
+            size_hint_x:.3
+            size_hint_y: .3
+            on_release: root.manager.current = 'DetallesContacto'
+        Button: #A PantallaGeneral
+            id: volver_panprin
+            text: "Volver a la PantallaGeneral"
+            size_hint_x:.3
+            size_hint_y: .3
+            on_release: root.manager.current = 'PantallaGeneral'
+
+<NuevoContacto>
+    canvas:
+        Color:
+            rgb: 1,1,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    GridLayout: #Grid que separa encabezado y body
+        rows: 3
+        GridLayout: #Grid que separa boton de titulo
+            size_hint_x:1
+            size_hint_y:.2
+            cols:2
+            AnchorLayout: #Anchor del boton
+                anchor_x: "left"
+                anchor_y: "top"
+                padding: 20,20,20,20
+                size_hint_x: .2
+                size_hint_y: 1
+                canvas:
+                    Color:
+                        rgb: 1,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                Button: #Volver a Contactos
+                    id: volver_contactos1
+                    text: "Volver!!!"
+                    size_hint_x: 1
+                    size_hint_y: 1
+                    on_release: root.manager.current = 'Contactos'
+
+            BoxLayout: #Box del titulo
+                canvas:
+                    Color:
+                        rgb: 1,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                Label: #Titulo
+                    id: label_nuevocontacto
+                    size: root.size
+                    text_size: cm(15), cm(2)
+                    font_size:'60sp'
+        GridLayout: #Grid que separa el body en 2
+            size_hint_x:1
+            size_hint_y:.7
+            cols: 2
+            BoxLayout: #Fotito
+                size_hint_x: .3
+                size_hint_y: 1
+                canvas:
+                    Color:
+                        rgb: 0,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            BoxLayout: #Box con los TextInputs
+                padding: 0,20,100,50
+                canvas:
+                    Color:
+                        rgb: 1,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                GridLayout: #TextInputs
+                    rows: 5
+                    size_hint_x: .7
+                    size_hint_y: 1
+                    canvas:
+                        Color:
+                            rgb: 0,0,1
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    #BoxLayout:
+                        #padding: 0,0,0,10
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint_x: .2
+                            size_hint_y: 1
+                            text: "NOMBRE "
+                        TextInput: #NOMBRE
+                            id: contacto_nombre
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint: .2, 1
+                            text: "APELLIDO "
+                        TextInput: #APELLIDO
+                            id: contacto_apellido
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint: .2, 1
+                            text: "MAIL "
+                        TextInput: #NOMBRE
+                            id: contacto_mail
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint: .2, 1
+                            text: "TELEFONO "
+                        TextInput: #TELEFONO
+                            id: contacto_telefono
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint: .2, 1
+                            text: "CELULAR"
+                        TextInput: #CELULAR
+                            id: contacto_celular
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+
+
+        BoxLayout: #botones guardar y descartar
+            size_hint_x: 1
+            size_hint_y: .1
+            canvas:
+                Color:
+                    rgb: 1,0,1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+            Button: #Boton Guardar
+                id: insert_conta
+                text: "Guardar"
+                size_hint_x: 1
+                size_hint_y: 1
+                on_release: root.InsertContactos()
+
+
+<DetallesContacto>
+    canvas:
+        Color:
+            rgb: 1,1,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    GridLayout: #Grid que separa encabezado y body
+        rows: 3
+        GridLayout: #Grid que separa boton de titulo
+            size_hint_x:1
+            size_hint_y:.2
+            cols:2
+            AnchorLayout: #Anchor del boton
+                anchor_x: "left"
+                anchor_y: "top"
+                padding: 20,20,20,20
+                size_hint_x: .2
+                size_hint_y: 1
+                canvas:
+                    Color:
+                        rgb: 1,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                Button: #Volver a Contactos
+                    id: volver_contactos2
+                    text: "Volver!!!"
+                    size_hint_x: 1
+                    size_hint_y: 1
+                    on_release: root.manager.current = 'Contactos'
+
+            BoxLayout: #Box del titulo
+                canvas:
+                    Color:
+                        rgb: 1,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                Label: #Titulo
+                    id: label_nuevocontacto
+                    size: root.size
+                    text_size: cm(15), cm(2)
+                    font_size:'60sp'
+
+        GridLayout: #Grid que separa el body en 2
+            size_hint_x:1
+            size_hint_y:.7
+            cols: 2
+            BoxLayout: #Fotito
+                size_hint_x: .3
+                size_hint_y: 1
+                canvas:
+                    Color:
+                        rgb: 0,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            BoxLayout: #Box con los TextInputs
+                padding: 0,20,100,50
+                canvas:
+                    Color:
+                        rgb: 1,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                GridLayout: #TextInputs
+                    rows: 5
+                    size_hint_x: .7
+                    size_hint_y: 1
+                    canvas:
+                        Color:
+                            rgb: 0,0,1
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint_x: .2
+                            size_hint_y: 1
+                            text: "NOMBRE "
+                        TextInput: #NOMBRE
+                            id: contacto_nombre_d
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint: .2, 1
+                            text: "APELLIDO "
+                        TextInput: #APELLIDO
+                            id: contacto_apellido_d
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint: .2, 1
+                            text: "MAIL "
+                        TextInput: #NOMBRE
+                            id: contacto_mail_d
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint: .2, 1
+                            text: "TELEFONO "
+                        TextInput: #TELEFONO
+                            id: contacto_telefono_d
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+                    GridLayout:
+                        cols: 2
+                        Label:
+                            size_hint: .2, 1
+                            text: "CELULAR"
+                        TextInput: #CELULAR
+                            id: contacto_celular_d
+                            size_hint: .3,.2
+                            multiline: False
+                            on_text_validate: on_enter
+
+        BoxLayout: #boton editar
+            size_hint_x: 1
+            size_hint_y: .1
+            canvas:
+                Color:
+                    rgb: 1,0,1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+            Button: #Boton Guardar
+                id: editar_contactos
+                text: "Editar"
+                size_hint_x: 1
+                size_hint_y: 1
+                on_release: root.UpdateContactos()

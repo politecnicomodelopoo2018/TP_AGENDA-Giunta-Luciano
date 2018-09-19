@@ -1,16 +1,17 @@
 from kivy import kivy
 from kivy.app import App
 from DB import DB
+from Contactos import Contacto
 from Agendas import Agenda
 kivy.require("1.8.0")
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 
+
 DB().SetConection('127.0.0.1', 'root', 'alumno', 'TP_AGENDA')
 Builder.load_file('screenmanagerapp.kv')
 
 agenda = Agenda.Select(1)
-
 
 
 class PantallaGeneral(Screen):
@@ -80,8 +81,25 @@ class NuevoContacto(Screen):
     def __init__(self, **kwargs):
         super(NuevoContacto, self).__init__(**kwargs)
         self.ids.label_nuevocontacto.text = "NUEVO CONTACTO"
+    def InsertContactos(self):
+        nombre = self.ids.contacto_nombre.text
+        apellido = self.ids.contacto_apellido.text
+        mail = self.ids.contacto_mail.text
+        telefono = self.ids.contacto_telefono.text
+        celular = self.ids.contacto_celular.text
+        contacto = Contacto()
+        contacto.InsertContacto(nombre, apellido, mail, telefono, celular, 1)
 
 
+class DetallesContacto(Screen):
+    def __init__(self, **kwargs):
+        super(DetallesContacto, self).__init__(**kwargs)
+
+    def UpdateContactos(self):
+        contacto = Contacto()
+        contacto.SelectContacto(1)
+        contacto.SetContacto(self.nombre, self.apellido, self.mail, self.telefono, self.celular, self.idAgendas)
+        contacto.UpdateContacto(1)
 
 
 class Feriados(Screen):
@@ -93,6 +111,7 @@ root.add_widget(MisDatos(name='Mis Datos'))
 root.add_widget(Contactos(name='Contactos'))
 root.add_widget(Feriados(name='Feriados'))
 root.add_widget(NuevoContacto(name='NuevoContacto'))
+root.add_widget(DetallesContacto(name='DetallesContacto'))
 
 
 '''

@@ -9,13 +9,12 @@ class Contacto(object):
     celular = None
     idAgendas = None
 
-    def SetContacto(self, idcon, nombre, apellido, mail, telefono, celular, idag):
+    def SetContacto(self, nombre, apellido, mail, telefono, celular, idag):
         self.nombre = nombre
         self.apellido = apellido
         self.mail = mail
         self.telefono = telefono
         self.celular = celular
-        self.idContacto = idcon
         self.idAgendas = idag
 
     def DeserializarContacto(self, diccionario):
@@ -35,12 +34,9 @@ class Contacto(object):
         contacto.DeserializarContacto(d[0])
         return contacto
 
+    def InsertContacto(self, nombre, apellido, mail, telefono, celular, idag):
+        self.SetContacto(nombre, apellido, mail, telefono, celular,idag)
+        insert_cursor = DB().run("Insert into Contactos values(null,'" + self.nombre + "','" + self.apellido + "','" + self.telefono + "','" + self.celular + "','" + self.mail + "'," + str(self.idAgendas)+");")
 
-
-
-    def InsertContacto(self):
-
-        insert_cursor = DB().run("Insert into Contactos")
-
-    def UpdateDueno(self, id):
+    def UpdateContacto(self, id):
         DB().run("Update Contactos set nombre = '" + self.nombre + "', apellido = '" + self.apellido + "', telefono = '" + self.telefono + "', celular = '" + self.celular + "', mail = '" + self.mail + "', idAgendas = " + str(self.idAgendas) + " where idContactos =" + str(id) + ";")
