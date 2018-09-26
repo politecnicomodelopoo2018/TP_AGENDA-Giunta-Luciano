@@ -6,20 +6,31 @@ from Agendas import Agenda
 kivy.require("1.8.0")
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
-
+from kivy.uix.screenmanager import NoTransition
+from kivy.uix.screenmanager import FallOutTransition
 
 DB().SetConection('127.0.0.1', 'root', 'alumno', 'TP_AGENDA')
 Builder.load_file('screenmanagerapp.kv')
 
 agenda = Agenda.Select(1)
-
+root = ScreenManager()
 
 class PantallaGeneral(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super(PantallaGeneral, self).__init__(**kwargs)
+
+    def CambiarAnimacionMisDatos(self):
+        root.transition = NoTransition()
+
+    def CambiarAnimacionContactos(self):
+        root.transition = FallOutTransition()
 
 class MisDatos(Screen):
+    pass
+
+class MisDatosEditable(Screen):
     def __init__(self, **kwargs):
-        super(MisDatos, self).__init__(**kwargs)
+        super(MisDatosEditable, self).__init__(**kwargs)
         self.ids.label1.text = "MIS DATOS"
         self.ids.button1.background_normal = "Faraona.jpg"
         self.ids.foto.background_normal = "Camila.jpeg"
@@ -100,19 +111,16 @@ class DetallesContacto(Screen):
         contacto.SelectContacto(1)
         contacto.SetContacto(self.nombre, self.apellido, self.mail, self.telefono, self.celular, self.idAgendas)
         contacto.UpdateContacto(1)
-
-
 class Feriados(Screen):
     pass
 
-root = ScreenManager()
+
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
-root.add_widget(MisDatos(name='Mis Datos'))
+root.add_widget(MisDatos(name='MisDatos'))
 root.add_widget(Contactos(name='Contactos'))
 root.add_widget(Feriados(name='Feriados'))
 root.add_widget(NuevoContacto(name='NuevoContacto'))
 root.add_widget(DetallesContacto(name='DetallesContacto'))
-
 
 '''
 class PantallaSiguiente(Screen):
