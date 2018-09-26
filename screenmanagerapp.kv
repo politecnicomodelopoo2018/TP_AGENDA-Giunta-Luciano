@@ -38,7 +38,7 @@
                 size_hint_y: .5
                 text: "Contactos"
                 on_release: root.manager.current = 'Contactos'
-
+                on_release: root.manager.transition.direction = 'left'
             Button: #boton feriados
                 size_hint_x: .7
                 size_hint_y: .5
@@ -140,7 +140,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -157,7 +156,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -168,7 +166,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -179,7 +176,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -190,7 +186,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -201,7 +196,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -212,7 +206,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -223,7 +216,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -234,7 +226,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -245,7 +236,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -256,7 +246,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -267,7 +256,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
                 GridLayout:
                     cols: 2
                     Label:
@@ -278,7 +266,6 @@
                         size_hint: .3,.2
                         multiline: False
                         on_text_validate: on_enter
-                        disabled: True
 
             #celeste
             BoxLayout: #Foto del usuario + botones
@@ -329,8 +316,9 @@
                             Button:
                                 id: BotonGuardar
                                 text: 'Guardar'
-                                on_press: root.DisabledInputs()
                                 on_press: root.UpdateCosas()
+                                on_press: root.manager.current = "MisDatos"
+                                on_press: root.CambiarAnimacionMisDatos()
 
 <MisDatos>
 
@@ -349,6 +337,7 @@
             AnchorLayout: #Anchor del boton
                 anchor_x: "left"
                 anchor_y: "top"
+                id:AnchorRojo
                 padding: 20,20,20,20
                 size_hint_x: .2
                 size_hint_y: 1
@@ -363,7 +352,6 @@
                     size_hint_x:1
                     size_hint_y: 1
                     on_press: root.manager.current = 'PantallaGeneral'
-
 
 
             BoxLayout: #Box del titulo
@@ -560,14 +548,16 @@
                             Button: #Editar boton
                                 id: BotonEditar
                                 text: 'Editar'
-                                on_press: root.EnableInputs()
+                                on_press: root.manager.current = "MisDatosEditable"
+                                on_press: root.CambiarAnimacionMisDatos()
                         BoxLayout:
                             padding:10,0,0,0
                             Button:
                                 id: BotonGuardar
                                 text: 'Guardar'
-                                on_press: root.DisabledInputs()
                                 on_press: root.UpdateCosas()
+                                on_release: root.manager.current = 'MisDatos'
+                                on_press: root.CambiarAnimacionMisDatos()
 <Contactos>
     canvas:
         Color:
@@ -601,7 +591,7 @@
             size_hint_x:.3
             size_hint_y: .3
             on_release: root.manager.current = 'PantallaGeneral'
-
+            on_release: root.manager.transition.direction = "right"
 <NuevoContacto>
     canvas:
         Color:
@@ -750,6 +740,7 @@
                 size_hint_x: 1
                 size_hint_y: 1
                 on_release: root.InsertContactos()
+
 
 
 <DetallesContacto>

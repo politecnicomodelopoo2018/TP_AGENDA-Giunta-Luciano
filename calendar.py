@@ -7,6 +7,7 @@ kivy.require("1.8.0")
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.uix.screenmanager import NoTransition
+from kivy.properties import *
 from kivy.uix.screenmanager import FallOutTransition
 
 DB().SetConection('127.0.0.1', 'root', 'alumno', 'TP_AGENDA')
@@ -26,7 +27,31 @@ class PantallaGeneral(Screen):
         root.transition = FallOutTransition()
 
 class MisDatos(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super(MisDatos, self).__init__(**kwargs)
+        self.ids.label1.text = "MIS DATOS"
+        self.ids.button1.background_normal = "Faraona.jpg"
+        self.ids.foto.background_normal = "Camila.jpeg"
+        self.SetearDatosInput()
+
+    def SetearDatosInput(self):
+
+        self.ids.l_nombre.text = agenda.nombre
+        self.ids.l_apellido.text = agenda.apellido
+        self.ids.l_dni.text = str(agenda.DNI)
+        self.ids.l_telefono_urgencia.text = agenda.telefono_urgencia
+        self.ids.l_telefono.text = agenda.telefono
+        self.ids.l_celular.text = agenda.celular
+        self.ids.l_signo.text = agenda.signo
+        self.ids.l_obra_social.text = agenda.obra_social
+        self.ids.l_direccion.text = agenda.direccion
+        self.ids.l_nacimiento.text = str(agenda.nacimiento)
+        self.ids.l_estado_civil.text = agenda.estado_civil
+        self.ids.l_grupo_sanguineo.text = agenda.grupo_sanguineo
+        self.ids.l_mail.text = agenda.mail
+
+    def CambiarAnimacionMisDatos(self):
+        root.transition = NoTransition()
 
 class MisDatosEditable(Screen):
     def __init__(self, **kwargs):
@@ -37,6 +62,8 @@ class MisDatosEditable(Screen):
         self.SetearDatosInput()
 
     def SetearDatosInput(self):
+        misdatos = MisDatos()
+        misdatos.ids.label1.text = "UPDATEO"
         self.ids.t_nombre.text = agenda.nombre
         self.ids.t_apellido.text = agenda.apellido
         self.ids.t_dni.text = str(agenda.DNI)
@@ -51,40 +78,15 @@ class MisDatosEditable(Screen):
         self.ids.t_grupo_sanguineo.text = agenda.grupo_sanguineo
         self.ids.t_mail.text = agenda.mail
 
-    def DisabledInputs(self, evt=None):
-        self.ids.t_dni.disabled = True
-        self.ids.t_apellido.disabled = True
-        self.ids.t_nombre.disabled = True
-        self.ids.t_telefono.disabled = True
-        self.ids.t_obra_social.disabled = True
-        self.ids.t_mail.disabled = True
-        self.ids.t_direccion.disabled = True
-        self.ids.t_grupo_sanguineo.disabled = True
-        self.ids.t_celular.disabled = True
-        self.ids.t_nacimiento.disabled = True
-        self.ids.t_estado_civil.disabled = True
-        self.ids.t_telefono_urgencia.disabled = True
-        self.ids.t_signo.disabled = True
-
-    def EnableInputs(self, evt=None):
-        self.ids.t_dni.disabled = False
-        self.ids.t_apellido.disabled = False
-        self.ids.t_nombre.disabled = False
-        self.ids.t_telefono.disabled = False
-        self.ids.t_obra_social.disabled = False
-        self.ids.t_mail.disabled = False
-        self.ids.t_direccion.disabled = False
-        self.ids.t_grupo_sanguineo.disabled = False
-        self.ids.t_celular.disabled = False
-        self.ids.t_nacimiento.disabled = False
-        self.ids.t_estado_civil.disabled = False
-        self.ids.t_telefono_urgencia.disabled = False
-        self.ids.t_signo.disabled = False
-
+    def Mostrar(self):
+        misdatos = MisDatos()
+        misdatos.rebind = True
     def UpdateCosas(self):
         agenda.SetAgenda(self.ids.t_nombre.text, self.ids.t_apellido.text, self.ids.t_dni.text, self.ids.t_grupo_sanguineo.text, self.ids.t_telefono.text, self.ids.t_celular.text, self.ids.t_mail.text, self.ids.t_direccion.text, self.ids.t_signo.text, self.ids.t_telefono_urgencia.text, self.ids.t_nacimiento.text, self.ids.t_estado_civil.text, self.ids.t_obra_social.text)
         agenda.UpdateDueno(1)
 
+    def CambiarAnimacionMisDatos(self):
+        root.transition = NoTransition()
 class Contactos(Screen):
     pass
 
@@ -117,6 +119,7 @@ class Feriados(Screen):
 
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
 root.add_widget(MisDatos(name='MisDatos'))
+root.add_widget(MisDatosEditable(name='MisDatosEditable'))
 root.add_widget(Contactos(name='Contactos'))
 root.add_widget(Feriados(name='Feriados'))
 root.add_widget(NuevoContacto(name='NuevoContacto'))
