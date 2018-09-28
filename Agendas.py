@@ -55,7 +55,7 @@ class Agenda(object):
         d = select_cursor.fetchall()
         agenda = Agenda()
         agenda.DeserializarAgenda(d[0])
-
+        print (agenda.nombre)
         return agenda
 
     def UpdateDueno(self, id):

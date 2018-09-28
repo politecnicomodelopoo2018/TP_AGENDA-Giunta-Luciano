@@ -16,6 +16,8 @@ Builder.load_file('screenmanagerapp.kv')
 agenda = Agenda.Select(1)
 root = ScreenManager()
 
+
+
 class PantallaGeneral(Screen):
     def __init__(self, **kwargs):
         super(PantallaGeneral, self).__init__(**kwargs)
@@ -27,11 +29,18 @@ class PantallaGeneral(Screen):
         root.transition = FallOutTransition()
 
 class MisDatos(Screen):
+
     def __init__(self, **kwargs):
         super(MisDatos, self).__init__(**kwargs)
         self.ids.label1.text = "MIS DATOS"
         self.ids.button1.background_normal = "Faraona.jpg"
         self.ids.foto.background_normal = "Camila.jpeg"
+        self.SetearDatosInput()
+
+    def update(self):
+        print(11111111111111111111111111111111111111111111)
+        agenda = Agenda.Select(1)
+        self.ids.l_nombre.text="dfsfsdfsdfsdfsdfs"
         self.SetearDatosInput()
 
     def SetearDatosInput(self):
@@ -56,14 +65,13 @@ class MisDatos(Screen):
 class MisDatosEditable(Screen):
     def __init__(self, **kwargs):
         super(MisDatosEditable, self).__init__(**kwargs)
+        self.pantallaanterior= pant
         self.ids.label1.text = "MIS DATOS"
         self.ids.button1.background_normal = "Faraona.jpg"
         self.ids.foto.background_normal = "Camila.jpeg"
         self.SetearDatosInput()
 
     def SetearDatosInput(self):
-        misdatos = MisDatos()
-        misdatos.ids.label1.text = "UPDATEO"
         self.ids.t_nombre.text = agenda.nombre
         self.ids.t_apellido.text = agenda.apellido
         self.ids.t_dni.text = str(agenda.DNI)
@@ -78,9 +86,6 @@ class MisDatosEditable(Screen):
         self.ids.t_grupo_sanguineo.text = agenda.grupo_sanguineo
         self.ids.t_mail.text = agenda.mail
 
-    def Mostrar(self):
-        misdatos = MisDatos()
-        misdatos.rebind = True
     def UpdateCosas(self):
         agenda.SetAgenda(self.ids.t_nombre.text, self.ids.t_apellido.text, self.ids.t_dni.text, self.ids.t_grupo_sanguineo.text, self.ids.t_telefono.text, self.ids.t_celular.text, self.ids.t_mail.text, self.ids.t_direccion.text, self.ids.t_signo.text, self.ids.t_telefono_urgencia.text, self.ids.t_nacimiento.text, self.ids.t_estado_civil.text, self.ids.t_obra_social.text)
         agenda.UpdateDueno(1)
@@ -117,8 +122,10 @@ class Feriados(Screen):
     pass
 
 
+pant=MisDatos(name='MisDatos')
+
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
-root.add_widget(MisDatos(name='MisDatos'))
+root.add_widget(pant)
 root.add_widget(MisDatosEditable(name='MisDatosEditable'))
 root.add_widget(Contactos(name='Contactos'))
 root.add_widget(Feriados(name='Feriados'))

@@ -317,8 +317,9 @@
                                 id: BotonGuardar
                                 text: 'Guardar'
                                 on_press: root.UpdateCosas()
-                                on_press: root.manager.current = "MisDatos"
+                                on_press: root.manager.current = 'MisDatos'
                                 on_press: root.CambiarAnimacionMisDatos()
+                                on_press: root.pantallaanterior.update()
 
 <MisDatos>
 
