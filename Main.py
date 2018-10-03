@@ -8,7 +8,14 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.uix.screenmanager import NoTransition
 from kivy.properties import *
+from kivy.properties import NumericProperty
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.widget import Widget
+from kivy.uix.label import Label
 from kivy.uix.screenmanager import FallOutTransition
+import calendar
 
 DB().SetConection('127.0.0.1', 'root', 'alumno', 'TP_AGENDA')
 Builder.load_file('screenmanagerapp.kv')
@@ -17,10 +24,78 @@ agenda = Agenda.Select(1)
 root = ScreenManager()
 
 
+class Calendario(BoxLayout):
+    day = NumericProperty(0)
+    month = NumericProperty(6)
+    year = NumericProperty(2010)
+    root = BoxLayout(orientation="vertical")
 
+    def __init__(self, **kwargs):
+        super(Calendario, self).__init__(**kwargs)
+        self.add_widget(self.root)
+        self.create_calendario()
+
+    def create_calendario(self):
+        self.day_str = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        self.month_str = ['January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+                          'October', 'November', 'December']
+
+        self.dy = calendar.monthcalendar(self.year, self.month)
+        self.title = (self.month_str[self.month - 1] + ", " + str(self.year))
+
+        layout = GridLayout(cols=7)
+
+        for d in self.day_str:
+            b = Label(text='[b]' + d + '[/b]', markup=True)
+            layout.add_widget(b)
+
+        for wk in range(len(self.dy)):
+            for d in range(0, 7):
+                dateOfWeek = self.dy[wk][d]
+                if not dateOfWeek == 0:
+                    b = Button(text=str(dateOfWeek))
+                    b.bind(on_release=self.date_selected)
+                else:
+                    b = Label(text='')
+                layout.add_widget(b)
+        if self.root:
+            self.root.clear_widgets()
+        self.root.add_widget(layout)
+        bottombox = BoxLayout(orientation="horizontal", size_hint=(1, None), height=40)
+        bottombox.add_widget(Button(text='<', on_release=self.change_month))
+        bottombox.add_widget(Button(text='>', on_release=self.change_month))
+        self.root.add_widget(bottombox)
+
+    def change_month(self, event):
+        if event.text == '>':
+            if self.month == 12:
+                self.month = 1
+                self.year = self.year + 1
+            else:
+                self.month = self.month + 1
+        elif event.text == '<':
+            if self.month == 1:
+                self.month = 12
+                self.year = self.year - 1
+            else:
+                self.month = self.month - 1
+
+    def date_selected(self, event):
+        self.day = int(event.text)
+        self.dismiss()
+
+    def on_month(self, widget, event):
+        self.create_calendario()
+
+    def on_year(self, widget, event):
+        self.create_calendario()
+
+cal = Calendario(month=6, year=2014,
+                        size_hint=(None, None), size=(500, 400))
 class PantallaGeneral(Screen):
     def __init__(self, **kwargs):
         super(PantallaGeneral, self).__init__(**kwargs)
+        self.ids.caja_calendario.add_widget(cal)
 
     def CambiarAnimacionMisDatos(self):
         root.transition = NoTransition()
@@ -35,15 +110,10 @@ class MisDatos(Screen):
         self.ids.label1.text = "MIS DATOS"
         self.ids.button1.background_normal = "Faraona.jpg"
         self.ids.foto.background_normal = "Camila.jpeg"
-        self.SetearDatosInput()
+        self.SetearDatosLabel()
 
-    def update(self):
-        print(11111111111111111111111111111111111111111111)
-        agenda = Agenda.Select(1)
-        self.ids.l_nombre.text="dfsfsdfsdfsdfsdfs"
-        self.SetearDatosInput()
 
-    def SetearDatosInput(self):
+    def SetearDatosLabel(self):
 
         self.ids.l_nombre.text = agenda.nombre
         self.ids.l_apellido.text = agenda.apellido
@@ -65,7 +135,7 @@ class MisDatos(Screen):
 class MisDatosEditable(Screen):
     def __init__(self, **kwargs):
         super(MisDatosEditable, self).__init__(**kwargs)
-        self.pantallaanterior= pant
+        self.pantallaanterior= misdatos
         self.ids.label1.text = "MIS DATOS"
         self.ids.button1.background_normal = "Faraona.jpg"
         self.ids.foto.background_normal = "Camila.jpeg"
@@ -89,11 +159,26 @@ class MisDatosEditable(Screen):
     def UpdateCosas(self):
         agenda.SetAgenda(self.ids.t_nombre.text, self.ids.t_apellido.text, self.ids.t_dni.text, self.ids.t_grupo_sanguineo.text, self.ids.t_telefono.text, self.ids.t_celular.text, self.ids.t_mail.text, self.ids.t_direccion.text, self.ids.t_signo.text, self.ids.t_telefono_urgencia.text, self.ids.t_nacimiento.text, self.ids.t_estado_civil.text, self.ids.t_obra_social.text)
         agenda.UpdateDueno(1)
+        self.SeleccionarNuevamente()
+
+    def SeleccionarNuevamente(self):
+        agenda = Agenda.Select(1)
+        misdatos.SetearDatosLabel()
+
 
     def CambiarAnimacionMisDatos(self):
         root.transition = NoTransition()
+variable = 1
 class Contactos(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super(Contactos, self).__init__(**kwargs)
+        self.cantidad_cajas = variable
+        self.ids.GridConContactos.rows = variable
+        for item in range(variable):
+            self.ids.GridConContactos.add_widget(BoxLayout(text="Contactos",id=str(variable),))
+
+    def AgregarContacto(self):
+        self.cantidad_cajas += 1
 
 class NuevoContacto(Screen):
     def __init__(self, **kwargs):
@@ -109,10 +194,15 @@ class NuevoContacto(Screen):
         contacto.InsertContacto(nombre, apellido, mail, telefono, celular, 1)
 
 
-class DetallesContacto(Screen):
-    def __init__(self, **kwargs):
-        super(DetallesContacto, self).__init__(**kwargs)
 
+class DetallesContacto(Screen):
+    pass
+
+
+class ContactosEditable(Screen):
+    def __init__(self, **kwargs):
+        super(ContactosEditable, self).__init__(**kwargs)
+        print('hola')
     def UpdateContactos(self):
         contacto = Contacto()
         contacto.SelectContacto(1)
@@ -122,29 +212,19 @@ class Feriados(Screen):
     pass
 
 
-pant=MisDatos(name='MisDatos')
+misdatos=MisDatos(name='MisDatos')
+contactos=Contactos(name='Contactos')
+contactoseditables = ContactosEditable(name='ContactosEditable')
 
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
-root.add_widget(pant)
+root.add_widget(misdatos)
 root.add_widget(MisDatosEditable(name='MisDatosEditable'))
-root.add_widget(Contactos(name='Contactos'))
+root.add_widget(contactos)
 root.add_widget(Feriados(name='Feriados'))
 root.add_widget(NuevoContacto(name='NuevoContacto'))
 root.add_widget(DetallesContacto(name='DetallesContacto'))
+root.add_widget(contactoseditables)
 
-'''
-class PantallaSiguiente(Screen):
-    pass
-class PantallaAnterior(Screen):
-    pass
-
-
-root = ScreenManager()
-
-root.add_widget(PantallaGeneral(name='PantallaPrincipal'))
-#root.add_widget(PantallaSiguiente(name='PantallaSiguiente'))
-#root.add_widget(PantallaAnterior(name='PantallaAnterior'))
-'''
 class ScreenManagerApp(App):
 
     def build(self):

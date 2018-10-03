@@ -53,14 +53,12 @@
                         size: self.size
                         pos: self.pos
     BoxLayout:
+        id: caja_calendario
         size_hint: .7, 1
         canvas:
             Color:
                 rgb: 1,0,0
-        AnchorLayout: #boton volver
-            anchor_x: "left"
-            anchor_y: "top"
-            canvas:
+
 
 <MisDatosEditable>
 
@@ -310,16 +308,14 @@
                             Button: #Editar boton
                                 id: BotonEditar
                                 text: 'Editar'
-                                on_press: root.EnableInputs()
                         BoxLayout:
                             padding:10,0,0,0
                             Button:
                                 id: BotonGuardar
                                 text: 'Guardar'
                                 on_press: root.UpdateCosas()
-                                on_press: root.manager.current = 'MisDatos'
                                 on_press: root.CambiarAnimacionMisDatos()
-                                on_press: root.pantallaanterior.update()
+                                on_press: root.manager.current = 'MisDatos'
 
 <MisDatos>
 
@@ -556,7 +552,6 @@
                             Button:
                                 id: BotonGuardar
                                 text: 'Guardar'
-                                on_press: root.UpdateCosas()
                                 on_release: root.manager.current = 'MisDatos'
                                 on_press: root.CambiarAnimacionMisDatos()
 <Contactos>
@@ -567,32 +562,29 @@
             size: self.size
             pos: self.pos
     GridLayout:
-        rows: 3
+        rows: 2
         canvas:
             Color:
                 rgb: 1,1,1
             Rectangle:
                 size: self.size
                 pos: self.pos
-        Button: #Nuevo contacto ---> a nuevo NuevoContacto
-            id: agregar_contacto
-            text: "Agregar Contacto uwu (estas en contactos)"
-            size_hint_x:.3
-            size_hint_y: .3
-            on_release: root.manager.current = 'NuevoContacto'
-        Button: #Detalles contacto ---> a DetallesContacto
-            id: detalles_contacto
-            text: "Ver detalles del contacto owo"
-            size_hint_x:.3
-            size_hint_y: .3
-            on_release: root.manager.current = 'DetallesContacto'
-        Button: #A PantallaGeneral
-            id: volver_panprin
-            text: "Volver a la PantallaGeneral"
-            size_hint_x:.3
-            size_hint_y: .3
-            on_release: root.manager.current = 'PantallaGeneral'
-            on_release: root.manager.transition.direction = "right"
+        Button:
+            id:BotonAgregarWidget
+            size_hint_y:.2
+            text: "Agregar Widget"
+            on_press: root.AgregarContacto()
+        ScrollView:
+            GridLayout:
+                id: GridConContactos
+                size_hint_y:.8
+                canvas:
+                    Color:
+                        rgb: 1,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
 <NuevoContacto>
     canvas:
         Color:
@@ -828,51 +820,41 @@
                             size_hint_x: .2
                             size_hint_y: 1
                             text: "NOMBRE "
-                        TextInput: #NOMBRE
-                            id: contacto_nombre_d
+                        Label: #NOMBRE
+                            id: l_contacto_nombre
                             size_hint: .3,.2
-                            multiline: False
-                            on_text_validate: on_enter
                     GridLayout:
                         cols: 2
                         Label:
                             size_hint: .2, 1
                             text: "APELLIDO "
-                        TextInput: #APELLIDO
-                            id: contacto_apellido_d
+                        Label: #APELLIDO
+                            id: l_contacto_apellido
                             size_hint: .3,.2
-                            multiline: False
-                            on_text_validate: on_enter
                     GridLayout:
                         cols: 2
                         Label:
                             size_hint: .2, 1
                             text: "MAIL "
-                        TextInput: #NOMBRE
-                            id: contacto_mail_d
+                        Label: #MAIL
+                            id: l_contacto_mail
                             size_hint: .3,.2
-                            multiline: False
-                            on_text_validate: on_enter
                     GridLayout:
                         cols: 2
                         Label:
                             size_hint: .2, 1
                             text: "TELEFONO "
-                        TextInput: #TELEFONO
-                            id: contacto_telefono_d
+                        Label: #TELEFONO
+                            id: l_contacto_telefono
                             size_hint: .3,.2
-                            multiline: False
-                            on_text_validate: on_enter
                     GridLayout:
                         cols: 2
                         Label:
                             size_hint: .2, 1
                             text: "CELULAR"
-                        TextInput: #CELULAR
-                            id: contacto_celular_d
+                        Label: #CELULAR
+                            id: l_contacto_celular
                             size_hint: .3,.2
-                            multiline: False
-                            on_text_validate: on_enter
 
         BoxLayout: #boton editar
             size_hint_x: 1
