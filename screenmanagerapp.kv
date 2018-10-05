@@ -5,59 +5,77 @@
         Rectangle:
             size: self.size
             pos: self.pos
-    orientation: 'vertical'
-    BoxLayout: #Box con los botones
-        size_hint:  .3,1
-        canvas:
-            Color:
-                rgb: 0,0,1
+    GridLayout:
+        cols:2
+        BoxLayout: #Box con los botones
 
-        GridLayout: #grid con los botones y foto
-            rows: 5
-            BoxLayout: #foto + name
-                size_hint: .6, 1
-                canvas:
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-                Label:
-                    size: root.size
-                    text_size: cm(6), cm(4)
-                    text:'Nombre aki ahre xd'
-                    font_size:'20sp'
+            size_hint_x:  .3
+            size_hint_y:1
+            canvas:
+                Color:
+                    rgb: 0,0,1
 
-            Button: #boton mis datos
-                size_hint_x: .7
-                size_hint_y: .5
-                id: Boton_a_contacto
-                text: "Mis Datos"
-                on_release: root.manager.current = 'MisDatos'
+            GridLayout: #grid con los botones y foto
+                rows: 5
+                BoxLayout: #foto + name
+                    size_hint_x:.6
+                    size_hint_y:1
+                    canvas:
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    Label:
+                        size: root.size
+                        text_size: cm(6), cm(4)
+                        text:'Nombre aki ahre xd'
+                        font_size:'20sp'
 
-            Button: #boton contactos
-                size_hint_x: .7
-                size_hint_y: .5
-                text: "Contactos"
-                on_release: root.manager.current = 'Contactos'
-                on_release: root.manager.transition.direction = 'left'
-            Button: #boton feriados
-                size_hint_x: .7
-                size_hint_y: .5
-                text: "Feriados"
-                on_release: root.manager.current = 'Feriados'
-            BoxLayout: #cosas
-                size_hint: .33, 1
+                Button: #boton mis datos
+                    size_hint_x: .7
+                    size_hint_y: .5
+                    id: Boton_a_contacto
+                    text: "Mis Datos"
+                    on_release: root.manager.current = 'MisDatos'
+
+                Button: #boton contactos
+                    size_hint_x: .7
+                    size_hint_y: .5
+                    text: "Contactos"
+                    on_release: root.manager.current = 'Contactos'
+                    on_release: root.manager.transition.direction = 'left'
+                Button: #boton feriados
+                    size_hint_x: .7
+                    size_hint_y: .5
+                    text: "Feriados"
+                    on_release: root.manager.current = 'Feriados'
+                BoxLayout: #cosas
+                    size_hint: .33, .70
+                    canvas:
+                        Color:
+                            rgb: 1,0,0
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+        BoxLayout:
+            id: box_calendario
+            size_hint_x:.7
+            size_hint_y:1
+            canvas:
+                Color:
+                    rgb: 0,0,0
+                Rectangle:
+                    size:self.size
+                    pos:self.pos
+            BoxLayout:
+                id: caja_calendario
+                padding: 5,30,5,40
                 canvas:
                     Color:
-                        rgb: 1,0,0
+                        rgb: 0,0,0
                     Rectangle:
                         size: self.size
                         pos: self.pos
-    BoxLayout:
-        id: caja_calendario
-        size_hint: .7, 1
-        canvas:
-            Color:
-                rgb: 1,0,0
+
 
 
 <MisDatosEditable>
@@ -565,25 +583,39 @@
         rows: 2
         canvas:
             Color:
-                rgb: 1,1,1
+                rgb: 0,0,0
             Rectangle:
                 size: self.size
                 pos: self.pos
-        Button:
-            id:BotonAgregarWidget
-            size_hint_y:.2
-            text: "Agregar Widget"
-            on_press: root.AgregarContacto()
+        GridLayout:
+            size_hint_y: .3
+            cols:3
+            Button:
+                id:BotonAgregarContactos
+                size_hint_x:.2
+                text: "Volver"
+                on_press: root.manager.current = 'PantallaGeneral'
+            Button:
+                id:BotonAgregarWidget
+                size_hint_x:.4
+                text: "Agregar Widget"
+                on_press: root.AgregarContacto()
+            Button:
+                id:BotonAgregarContactos
+                size_hint_x:.4
+                text: "Nuevo Contacto"
+                on_press: root.manager.current = 'NuevoContacto'
+
         ScrollView:
-            GridLayout:
-                id: GridConContactos
-                size_hint_y:.8
-                canvas:
-                    Color:
-                        rgb: 1,1,1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
+            size_hint_y: .7
+            id: scrollview
+            canvas.before:
+                Color:
+                    rgb: 1, .5, 0, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
 
 <NuevoContacto>
     canvas:
@@ -733,6 +765,7 @@
                 size_hint_x: 1
                 size_hint_y: 1
                 on_release: root.InsertContactos()
+                on_release: root.manager.current = 'Contactos'
 
 
 

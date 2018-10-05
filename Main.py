@@ -14,6 +14,7 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.screenmanager import FallOutTransition
 import calendar
 
@@ -91,7 +92,7 @@ class Calendario(BoxLayout):
         self.create_calendario()
 
 cal = Calendario(month=6, year=2014,
-                        size_hint=(None, None), size=(500, 400))
+                        size_hint=(1, 1), size=(560, 500))
 class PantallaGeneral(Screen):
     def __init__(self, **kwargs):
         super(PantallaGeneral, self).__init__(**kwargs)
@@ -168,22 +169,33 @@ class MisDatosEditable(Screen):
 
     def CambiarAnimacionMisDatos(self):
         root.transition = NoTransition()
+
 variable = 1
+lista = Contacto.SeleccionarContactos()
 class Contactos(Screen):
+    contactos = ListProperty()
     def __init__(self, **kwargs):
         super(Contactos, self).__init__(**kwargs)
-        self.cantidad_cajas = variable
-        self.ids.GridConContactos.rows = variable
-        for item in range(variable):
-            self.ids.GridConContactos.add_widget(BoxLayout(text="Contactos",id=str(variable),))
 
-    def AgregarContacto(self):
-        self.cantidad_cajas += 1
+
+    def AgregarContacto(self, *args):
+        self.AgregarContactoLista()
+        scroll = self.ids.scrollview
+        scroll.clear_widgets()
+        grid = GridLayout(cols=4, size_hint_y=30, spacing='20dp')
+        for item in self.contactos:
+            grid.add_widget(Button(text=item.nombre, font_size='30sp', size_hint_y=None))
+        scroll.add_widget(grid)
+
+    def AgregarContactoLista(self):
+        lista = Contacto.SeleccionarContactos()
+        self.contactos = lista
 
 class NuevoContacto(Screen):
     def __init__(self, **kwargs):
         super(NuevoContacto, self).__init__(**kwargs)
         self.ids.label_nuevocontacto.text = "NUEVO CONTACTO"
+
     def InsertContactos(self):
         nombre = self.ids.contacto_nombre.text
         apellido = self.ids.contacto_apellido.text
@@ -208,6 +220,8 @@ class ContactosEditable(Screen):
         contacto.SelectContacto(1)
         contacto.SetContacto(self.nombre, self.apellido, self.mail, self.telefono, self.celular, self.idAgendas)
         contacto.UpdateContacto(1)
+
+
 class Feriados(Screen):
     pass
 
@@ -215,13 +229,13 @@ class Feriados(Screen):
 misdatos=MisDatos(name='MisDatos')
 contactos=Contactos(name='Contactos')
 contactoseditables = ContactosEditable(name='ContactosEditable')
-
+nuevocontacto = NuevoContacto(name='NuevoContacto')
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
 root.add_widget(misdatos)
 root.add_widget(MisDatosEditable(name='MisDatosEditable'))
 root.add_widget(contactos)
 root.add_widget(Feriados(name='Feriados'))
-root.add_widget(NuevoContacto(name='NuevoContacto'))
+root.add_widget(nuevocontacto)
 root.add_widget(DetallesContacto(name='DetallesContacto'))
 root.add_widget(contactoseditables)
 

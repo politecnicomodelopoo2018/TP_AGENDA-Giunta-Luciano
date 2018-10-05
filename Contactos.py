@@ -34,6 +34,17 @@ class Contacto(object):
         contacto.DeserializarContacto(d[0])
         return contacto
 
+    @staticmethod
+    def SeleccionarContactos():
+        lista = []
+        select_cursor = DB().run("Select * from Contactos;")
+        for item in select_cursor:
+            contacto = Contacto()
+            contacto.DeserializarContacto(item)
+            lista.append(contacto)
+        return lista
+
+
     def InsertContacto(self, nombre, apellido, mail, telefono, celular, idag):
         self.SetContacto(nombre, apellido, mail, telefono, celular,idag)
         insert_cursor = DB().run("Insert into Contactos values(null,'" + self.nombre + "','" + self.apellido + "','" + self.telefono + "','" + self.celular + "','" + self.mail + "'," + str(self.idAgendas)+");")
