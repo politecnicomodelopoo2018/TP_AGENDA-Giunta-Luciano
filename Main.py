@@ -172,21 +172,26 @@ class MisDatosEditable(Screen):
 
 variable = 1
 lista = Contacto.SeleccionarContactos()
+
 class Contactos(Screen):
     contactos = ListProperty()
     def __init__(self, **kwargs):
         super(Contactos, self).__init__(**kwargs)
-
+        self.AgregarContacto()
 
     def AgregarContacto(self, *args):
         self.AgregarContactoLista()
         scroll = self.ids.scrollview
         scroll.clear_widgets()
-        grid = GridLayout(cols=4, size_hint_y=30, spacing='20dp')
+        grid = GridLayout(cols=3, size_hint_y=30, spacing='15dp', id='GridDelScroll')
         for item in self.contactos:
-            grid.add_widget(Button(text=item.nombre, font_size='30sp', size_hint_y=None))
+            bnt = Button(text=item.nombre, font_size='30sp', size_hint_y=None, height=170, id=str(item.idContacto))
+            bnt.bind(on_press = Contactos.CambiarScreen)
+            grid.add_widget(bnt)
         scroll.add_widget(grid)
 
+    def CambiarScreen(self,evn=None):
+        root.current='DetallesContacto'
     def AgregarContactoLista(self):
         lista = Contacto.SeleccionarContactos()
         self.contactos = lista
@@ -204,6 +209,7 @@ class NuevoContacto(Screen):
         celular = self.ids.contacto_celular.text
         contacto = Contacto()
         contacto.InsertContacto(nombre, apellido, mail, telefono, celular, 1)
+        contactos.AgregarContacto()
 
 
 
@@ -229,6 +235,7 @@ class Feriados(Screen):
 misdatos=MisDatos(name='MisDatos')
 contactos=Contactos(name='Contactos')
 contactoseditables = ContactosEditable(name='ContactosEditable')
+detallecontacto = DetallesContacto(name='DetallesContacto')
 nuevocontacto = NuevoContacto(name='NuevoContacto')
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
 root.add_widget(misdatos)
@@ -236,11 +243,10 @@ root.add_widget(MisDatosEditable(name='MisDatosEditable'))
 root.add_widget(contactos)
 root.add_widget(Feriados(name='Feriados'))
 root.add_widget(nuevocontacto)
-root.add_widget(DetallesContacto(name='DetallesContacto'))
+root.add_widget(detallecontacto)
 root.add_widget(contactoseditables)
 
 class ScreenManagerApp(App):
-
     def build(self):
         return root
 
