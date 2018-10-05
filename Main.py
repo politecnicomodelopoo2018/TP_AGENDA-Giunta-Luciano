@@ -186,12 +186,14 @@ class Contactos(Screen):
         grid = GridLayout(cols=3, size_hint_y=30, spacing='15dp', id='GridDelScroll')
         for item in self.contactos:
             bnt = Button(text=item.nombre, font_size='30sp', size_hint_y=None, height=170, id=str(item.idContacto))
-            bnt.bind(on_press = Contactos.CambiarScreen)
+            bnt.bind(on_press = Contactos.CambiarScreen(item), on_press = self.GuardarId(item.idContacto))
             grid.add_widget(bnt)
         scroll.add_widget(grid)
 
-    def CambiarScreen(self,evn=None):
+    def CambiarScreen(self, evn = None):
         root.current='DetallesContacto'
+    def GuardarId(self,idCont):
+
     def AgregarContactoLista(self):
         lista = Contacto.SeleccionarContactos()
         self.contactos = lista
