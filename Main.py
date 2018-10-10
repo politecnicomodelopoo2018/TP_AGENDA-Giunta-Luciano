@@ -163,22 +163,24 @@ class MisDatosEditable(Screen):
         self.SeleccionarNuevamente()
 
     def SeleccionarNuevamente(self):
-        agenda = Agenda.Select(1)
         misdatos.SetearDatosLabel()
 
 
     def CambiarAnimacionMisDatos(self):
         root.transition = NoTransition()
 
-variable = 1
+
 lista = Contacto.SeleccionarContactos()
+from functools import partial
+contacto = Contacto()
+contactoID = 1
 
 class Contactos(Screen):
     contactos = ListProperty()
+    variable = None
     def __init__(self, **kwargs):
         super(Contactos, self).__init__(**kwargs)
         self.AgregarContacto()
-
     def AgregarContacto(self, *args):
         self.AgregarContactoLista()
         scroll = self.ids.scrollview
@@ -186,13 +188,20 @@ class Contactos(Screen):
         grid = GridLayout(cols=3, size_hint_y=30, spacing='15dp', id='GridDelScroll')
         for item in self.contactos:
             bnt = Button(text=item.nombre, font_size='30sp', size_hint_y=None, height=170, id=str(item.idContacto))
-            bnt.bind(on_press = Contactos.CambiarScreen(item), on_press = self.GuardarId(item.idContacto))
+            buttoncallback = partial(self.GuardarId, item.idContacto)
+            bnt.bind(on_press = buttoncallback)
+            bnt.bind(on_press = self.CambiarScreen)
+
             grid.add_widget(bnt)
         scroll.add_widget(grid)
 
     def CambiarScreen(self, evn = None):
         root.current='DetallesContacto'
-    def GuardarId(self,idCont):
+
+
+    def GuardarId(self, *args):
+        detallecontacto.RellenarLabels()
+        contactoID = args[0]
 
     def AgregarContactoLista(self):
         lista = Contacto.SeleccionarContactos()
@@ -214,21 +223,32 @@ class NuevoContacto(Screen):
         contactos.AgregarContacto()
 
 
-
 class DetallesContacto(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super(DetallesContacto, self).__init__(**kwargs)
+
+    def RellenarLabels(self):
+        contacto = Contacto.SelectContacto(contactoID)
+        self.ids.l_contacto_nombre.text = contacto.nombre
+        self.ids.l_contacto_apellido.text = contacto.apellido
+        self.ids.l_contacto_mail.text = contacto.mail
+        self.ids.l_contacto_telefono.text = contacto.telefono
+        self.ids.l_contacto_celular.text = contacto.celular
 
 
 class ContactosEditable(Screen):
     def __init__(self, **kwargs):
         super(ContactosEditable, self).__init__(**kwargs)
-        print('hola')
-    def UpdateContactos(self):
-        contacto = Contacto()
-        contacto.SelectContacto(1)
-        contacto.SetContacto(self.nombre, self.apellido, self.mail, self.telefono, self.celular, self.idAgendas)
-        contacto.UpdateContacto(1)
 
+    def UpdateContactos(self):
+        contacto =Contacto.SelectContacto(contactoID)
+        contacto.SetContacto(self.ids.t_con_editable_nombre.text, self.ids.t_con_editable_apellido.text,self.ids.t_con_editable_mail.text, self.ids.t_con_editable_telefono.text, self.ids.t_con_editable_celular.text, contacto.idAgendas)
+        contacto.UpdateContacto(contacto.idContacto)
+
+    def SeleccionarNuevamente(self):
+        contacto = Contacto.SelectContacto(contactoID)
+        detallecontacto.RellenarLabels()
+        contactos.AgregarContacto()
 
 class Feriados(Screen):
     pass
