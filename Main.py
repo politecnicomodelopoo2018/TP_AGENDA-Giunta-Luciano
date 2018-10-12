@@ -3,6 +3,7 @@ from kivy.app import App
 from DB import DB
 from Contactos import Contacto
 from Agendas import Agenda
+from Eventos import Evento
 kivy.require("1.8.0")
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
@@ -16,6 +17,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.screenmanager import FallOutTransition
+import datetime
 import calendar
 
 DB().SetConection('127.0.0.1', 'root', 'alumno', 'TP_AGENDA')
@@ -42,9 +44,9 @@ class Calendario(BoxLayout):
                           'October', 'November', 'December']
 
         self.dy = calendar.monthcalendar(self.year, self.month)
-        self.title = (self.month_str[self.month - 1] + ", " + str(self.year))
+        titulo = Label(text=self.month_str[self.month - 1] + ", " + str(self.year), size_hint_y=.2)
 
-        layout = GridLayout(cols=7)
+        layout = GridLayout(cols=7, size_hint_y=.8)
 
         for d in self.day_str:
             b = Label(text='[b]' + d + '[/b]', markup=True)
@@ -61,11 +63,14 @@ class Calendario(BoxLayout):
                 layout.add_widget(b)
         if self.root:
             self.root.clear_widgets()
+
+        self.root.add_widget(titulo)
         self.root.add_widget(layout)
         bottombox = BoxLayout(orientation="horizontal", size_hint=(1, None), height=40)
         bottombox.add_widget(Button(text='<', on_release=self.change_month))
         bottombox.add_widget(Button(text='>', on_release=self.change_month))
         self.root.add_widget(bottombox)
+
 
     def change_month(self, event):
         if event.text == '>':
@@ -83,7 +88,7 @@ class Calendario(BoxLayout):
 
     def date_selected(self, event):
         self.day = int(event.text)
-        self.dismiss()
+        self.cambiarpantalla()
 
     def on_month(self, widget, event):
         self.create_calendario()
@@ -91,7 +96,12 @@ class Calendario(BoxLayout):
     def on_year(self, widget, event):
         self.create_calendario()
 
-cal = Calendario(month=6, year=2014,
+    def cambiarpantalla(self, evn=None):
+        root.current = 'HojaAgenda'
+
+
+fecha = datetime.datetime.now()
+cal = Calendario(month=fecha.month, year=fecha.year,
                         size_hint=(1, 1), size=(560, 500))
 class PantallaGeneral(Screen):
     def __init__(self, **kwargs):
@@ -173,7 +183,8 @@ class MisDatosEditable(Screen):
 lista = Contacto.SeleccionarContactos()
 from functools import partial
 contacto = Contacto()
-contactoID = 1
+contactoID = Contacto()
+contactoID.idContacto = 1
 
 class Contactos(Screen):
     contactos = ListProperty()
@@ -181,8 +192,9 @@ class Contactos(Screen):
     def __init__(self, **kwargs):
         super(Contactos, self).__init__(**kwargs)
         self.AgregarContacto()
-    def AgregarContacto(self, *args):
-        self.AgregarContactoLista()
+    def AgregarContacto(self):
+        self.contactos = self.AgregarContactoLista()
+        print(self.contactos[0].nombre, self.contactos[1].nombre)
         scroll = self.ids.scrollview
         scroll.clear_widgets()
         grid = GridLayout(cols=3, size_hint_y=30, spacing='15dp', id='GridDelScroll')
@@ -200,12 +212,12 @@ class Contactos(Screen):
 
 
     def GuardarId(self, *args):
+        contactoID.idContacto = args[0]
         detallecontacto.RellenarLabels()
-        contactoID = args[0]
 
     def AgregarContactoLista(self):
         lista = Contacto.SeleccionarContactos()
-        self.contactos = lista
+        return lista
 
 class NuevoContacto(Screen):
     def __init__(self, **kwargs):
@@ -228,38 +240,69 @@ class DetallesContacto(Screen):
         super(DetallesContacto, self).__init__(**kwargs)
 
     def RellenarLabels(self):
-        contacto = Contacto.SelectContacto(contactoID)
+        contacto = Contacto.SelectContacto(contactoID.idContacto)
         self.ids.l_contacto_nombre.text = contacto.nombre
         self.ids.l_contacto_apellido.text = contacto.apellido
         self.ids.l_contacto_mail.text = contacto.mail
         self.ids.l_contacto_telefono.text = contacto.telefono
         self.ids.l_contacto_celular.text = contacto.celular
-
+        contactoseditables.ids.t_con_editable_nombre.text = contacto.nombre
+        contactoseditables.ids.t_con_editable_apellido.text = contacto.apellido
+        contactoseditables.ids.t_con_editable_mail.text = contacto.mail
+        contactoseditables.ids.t_con_editable_telefono.text = contacto.telefono
+        contactoseditables.ids.t_con_editable_celular.text = contacto.celular
 
 class ContactosEditable(Screen):
     def __init__(self, **kwargs):
         super(ContactosEditable, self).__init__(**kwargs)
 
+
     def UpdateContactos(self):
-        contacto =Contacto.SelectContacto(contactoID)
+        contacto =Contacto.SelectContacto(contactoID.idContacto)
         contacto.SetContacto(self.ids.t_con_editable_nombre.text, self.ids.t_con_editable_apellido.text,self.ids.t_con_editable_mail.text, self.ids.t_con_editable_telefono.text, self.ids.t_con_editable_celular.text, contacto.idAgendas)
         contacto.UpdateContacto(contacto.idContacto)
+        self.SeleccionarNuevamente()
 
     def SeleccionarNuevamente(self):
-        contacto = Contacto.SelectContacto(contactoID)
-        detallecontacto.RellenarLabels()
         contactos.AgregarContacto()
+
 
 class Feriados(Screen):
     pass
 
+class HojaAgenda(Screen):
+    def __init__(self, **kwargs):
+        super(HojaAgenda, self).__init__(**kwargs)
+
+    def AgregarEvento(self):
+        self.eventos = self.AgregarEventoLista()
+        print(self.eventos[0].titulo, self.eventos[1].titulo)
+        scroll = self.ids.scrollview
+        scroll.clear_widgets()
+        grid = GridLayout(cols=1, size_hint_y=30, spacing='15dp', id='GridEventos')
+        for item in self.eventos:
+            bnt = Button(text=item.titulo, font_size='30sp', size_hint_y=None, height=170, id=str(item.idEvento))
+            buttoncallback = partial(self.GuardarId, item.idContacto)
+            bnt.bind(on_press = buttoncallback)
+            bnt.bind(on_press = self.CambiarScreen)
+ '''esto está pal ogt VER'''
+
+            grid.add_widget(bnt)
+        scroll.add_widget(grid)
+
+    def AgregarEventosLista(self):
+        lista = Evento.SeleccionarEventos()
+        return lista
+
 
 misdatos=MisDatos(name='MisDatos')
 contactos=Contactos(name='Contactos')
-contactoseditables = ContactosEditable(name='ContactosEditable')
+hojaagenda = HojaAgenda(name = 'HojaAgenda')
 detallecontacto = DetallesContacto(name='DetallesContacto')
 nuevocontacto = NuevoContacto(name='NuevoContacto')
+contactoseditables = ContactosEditable(name='ContactosEditable')
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
+root.add_widget(hojaagenda)
 root.add_widget(misdatos)
 root.add_widget(MisDatosEditable(name='MisDatosEditable'))
 root.add_widget(contactos)
@@ -268,7 +311,9 @@ root.add_widget(nuevocontacto)
 root.add_widget(detallecontacto)
 root.add_widget(contactoseditables)
 
+
 class ScreenManagerApp(App):
+    title = "Agenda"
     def build(self):
         return root
 

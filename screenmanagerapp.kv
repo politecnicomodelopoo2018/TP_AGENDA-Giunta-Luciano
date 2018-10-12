@@ -76,7 +76,58 @@
                         size: self.size
                         pos: self.pos
 
-
+<HojaAgenda>
+    canvas:
+        Color:
+            rgb: 1,1,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    GridLayout:
+        cols: 2
+        GridLayout:
+            rows: 3
+            size_hint_x: .3
+            BoxLayout:
+                size_hint_y: .2
+                id: dia
+                canvas:
+                    Color:
+                        rgb: 1,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            Button:
+                size_hint_y: .2
+                text: '<-- xD'
+                id: boton_volver_cal
+                on_release: root.manager.current = 'PantallaGeneral'
+            BoxLayout:
+                size_hint_y: .6
+                canvas:
+                    Color:
+                        rgb: 1,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+        BoxLayout: #caja amarilla (scroll)
+            size_hint_x: .7
+            padding: 30, 40, 30, 40
+            id: eventos
+            canvas:
+                Color:
+                    rgb: 1,1,0
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            ScrollView:
+                id: escrolviu
+                canvas.before:
+                    Color:
+                        rgb: 0, 0, 0
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
 <MisDatosEditable>
 
@@ -918,7 +969,7 @@
                             id: l_contacto_celular
                             size_hint: .3,.2
 
-        BoxLayout: #boton editar
+        BoxLayout: #box boton editar
             size_hint_x: 1
             size_hint_y: .1
             canvas:
@@ -928,7 +979,7 @@
                     size: self.size
                     pos: self.pos
 
-            Button: #Boton Guardar
+            Button: #Boton Editar
                 id: editar_contactos
                 text: "Editar"
                 size_hint_x: 1
@@ -1053,6 +1104,7 @@
                             id: t_con_editable_telefono
                             size_hint: .3,.2
                             multiline: False
+                            text: "telefono"
                             on_text_validate: on_enter
 
                     GridLayout:
@@ -1083,4 +1135,4 @@
                 size_hint_x: 1
                 size_hint_y: 1
                 on_release: root.UpdateContactos()
-                on_release: root.manager.current = 'DetallesContacto'
+                on_release: root.manager.current = 'Contactos'
