@@ -32,6 +32,16 @@ class Evento(object):
         return evento
 
     @staticmethod
+    def SelectEventoFecha(fecha):
+        lista = []
+        select_cursor = DB().run("Select * from Eventos where fecha = " + str(fecha) + ";")
+        for item in select_cursor:
+            evento = Evento()
+            evento.DeserializarEvento(item)
+            lista.append(evento)
+        return lista
+
+    @staticmethod
     def SeleccionarEventos():
         lista = []
         select_cursor = DB().run("Select * from Eventos;")

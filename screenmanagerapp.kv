@@ -89,14 +89,19 @@
             rows: 3
             size_hint_x: .3
             BoxLayout:
-                size_hint_y: .2
-                id: dia
-                canvas:
+                id: Caja_dia
+                canvas.before:
                     Color:
-                        rgb: 1,0,0
+                        rgb: 0,0,0
                     Rectangle:
                         size: self.size
                         pos: self.pos
+                Label:
+                    size_hint_y: .2
+                    id: dia
+                    size: root.size
+                    text_size: cm(6), cm(4)
+                    font_size:'20sp'
             Button:
                 size_hint_y: .2
                 text: '<-- xD'

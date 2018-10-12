@@ -26,6 +26,12 @@ Builder.load_file('screenmanagerapp.kv')
 agenda = Agenda.Select(1)
 root = ScreenManager()
 
+class Fecha(object):
+    dia = None
+    mes = None
+    year = None
+
+fecha_boton = Fecha()
 
 class Calendario(BoxLayout):
     day = NumericProperty(0)
@@ -45,7 +51,8 @@ class Calendario(BoxLayout):
 
         self.dy = calendar.monthcalendar(self.year, self.month)
         titulo = Label(text=self.month_str[self.month - 1] + ", " + str(self.year), size_hint_y=.2)
-
+        fecha_boton.mes = self.month
+        fecha_boton.year = self.year
         layout = GridLayout(cols=7, size_hint_y=.8)
 
         for d in self.day_str:
@@ -53,6 +60,7 @@ class Calendario(BoxLayout):
             layout.add_widget(b)
 
         for wk in range(len(self.dy)):
+
             for d in range(0, 7):
                 dateOfWeek = self.dy[wk][d]
                 if not dateOfWeek == 0:
@@ -88,6 +96,9 @@ class Calendario(BoxLayout):
 
     def date_selected(self, event):
         self.day = int(event.text)
+        fecha_boton.dia = self.day
+        hojaagenda = HojaAgenda(name='HojaAgenda')
+        root.add_widget(hojaagenda)
         self.cambiarpantalla()
 
     def on_month(self, widget, event):
@@ -98,6 +109,7 @@ class Calendario(BoxLayout):
 
     def cambiarpantalla(self, evn=None):
         root.current = 'HojaAgenda'
+
 
 
 fecha = datetime.datetime.now()
@@ -273,36 +285,35 @@ class Feriados(Screen):
 class HojaAgenda(Screen):
     def __init__(self, **kwargs):
         super(HojaAgenda, self).__init__(**kwargs)
-
+        self.AgregarEvento()
     def AgregarEvento(self):
-        self.eventos = self.AgregarEventoLista()
-        print(self.eventos[0].titulo, self.eventos[1].titulo)
-        scroll = self.ids.scrollview
+        self.eventos = self.AgregarEventosLista()
+        self.ids.Caja_dia.ids.dia.text = str(fecha_boton.dia)
+        scroll = self.ids.escrolviu
         scroll.clear_widgets()
         grid = GridLayout(cols=1, size_hint_y=30, spacing='15dp', id='GridEventos')
         for item in self.eventos:
-            bnt = Button(text=item.titulo, font_size='30sp', size_hint_y=None, height=170, id=str(item.idEvento))
-            buttoncallback = partial(self.GuardarId, item.idContacto)
-            bnt.bind(on_press = buttoncallback)
-            bnt.bind(on_press = self.CambiarScreen)
- '''esto está pal ogt VER'''
-
+            bnt = Button(text=item.titulo, font_size='30sp', size_hint_y=None, height=170, id=str(item.idEventos))
+            #buttoncallback = partial(self.GuardarId, item.idContacto)
+            #bnt.bind(on_press = buttoncallback)
+            #bnt.bind(on_press = self.CambiarScreen)
             grid.add_widget(bnt)
+
         scroll.add_widget(grid)
 
     def AgregarEventosLista(self):
-        lista = Evento.SeleccionarEventos()
-        return lista
+        eventos = Evento.SelectEventoFecha('2018-12-25')
+        return eventos
 
 
 misdatos=MisDatos(name='MisDatos')
 contactos=Contactos(name='Contactos')
-hojaagenda = HojaAgenda(name = 'HojaAgenda')
+
 detallecontacto = DetallesContacto(name='DetallesContacto')
 nuevocontacto = NuevoContacto(name='NuevoContacto')
 contactoseditables = ContactosEditable(name='ContactosEditable')
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
-root.add_widget(hojaagenda)
+
 root.add_widget(misdatos)
 root.add_widget(MisDatosEditable(name='MisDatosEditable'))
 root.add_widget(contactos)
