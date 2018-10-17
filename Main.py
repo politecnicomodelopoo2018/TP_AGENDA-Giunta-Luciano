@@ -22,7 +22,6 @@ import calendar
 
 DB().SetConection('127.0.0.1', 'root', 'alumno', 'TP_AGENDA')
 Builder.load_file('screenmanagerapp.kv')
-
 agenda = Agenda.Select(1)
 root = ScreenManager()
 
@@ -33,11 +32,39 @@ class Fecha(object):
 
 fecha_boton = Fecha()
 
+class HojaAgenda(Screen):
+    def __init__(self, **kwargs):
+        super(HojaAgenda, self).__init__(**kwargs)
+        self.AgregarEvento()
+    def AgregarEvento(self):
+        print(fecha_boton.dia)
+        self.eventos = self.AgregarEventosLista()
+        self.ids.dia.text = str(fecha_boton.dia)
+        scroll = self.ids.escrolviu
+        scroll.clear_widgets()
+        grid = GridLayout(cols=1, size_hint_y=30, spacing='15dp', id='GridEventos')
+        for item in self.eventos:
+            bnt = Button(text=item.titulo, font_size='30sp', size_hint_y=None, height=170, id=str(item.idEventos))
+            #buttoncallback = partial(self.GuardarId, item.idContacto)
+            #bnt.bind(on_press = buttoncallback)
+            #bnt.bind(on_press = self.CambiarScreen)
+            grid.add_widget(bnt)
+
+        scroll.add_widget(grid)
+    def SeleccionarNuevamente(self):
+        self.AgregarEvento()
+
+    def AgregarEventosLista(self):
+        eventos = Evento.SelectEventoFecha('2018-12-25')
+        return eventos
+
 class Calendario(BoxLayout):
     day = NumericProperty(0)
     month = NumericProperty(6)
     year = NumericProperty(2010)
     root = BoxLayout(orientation="vertical")
+    screen = HojaAgenda(name='HojaAgenda')
+
 
     def __init__(self, **kwargs):
         super(Calendario, self).__init__(**kwargs)
@@ -95,11 +122,15 @@ class Calendario(BoxLayout):
                 self.month = self.month - 1
 
     def date_selected(self, event):
+        self.BorrarHojaAgenda(self.screen)
         self.day = int(event.text)
         fecha_boton.dia = self.day
-        hojaagenda = HojaAgenda(name='HojaAgenda')
-        root.add_widget(hojaagenda)
+        self.screen = HojaAgenda(name="HojaAgenda")
+        root.add_widget(self.screen)
         self.cambiarpantalla()
+
+    def BorrarHojaAgenda(self, screen):
+        root.remove_widget(screen)
 
     def on_month(self, widget, event):
         self.create_calendario()
@@ -282,28 +313,9 @@ class ContactosEditable(Screen):
 class Feriados(Screen):
     pass
 
-class HojaAgenda(Screen):
-    def __init__(self, **kwargs):
-        super(HojaAgenda, self).__init__(**kwargs)
-        self.AgregarEvento()
-    def AgregarEvento(self):
-        self.eventos = self.AgregarEventosLista()
-        self.ids.Caja_dia.ids.dia.text = str(fecha_boton.dia)
-        scroll = self.ids.escrolviu
-        scroll.clear_widgets()
-        grid = GridLayout(cols=1, size_hint_y=30, spacing='15dp', id='GridEventos')
-        for item in self.eventos:
-            bnt = Button(text=item.titulo, font_size='30sp', size_hint_y=None, height=170, id=str(item.idEventos))
-            #buttoncallback = partial(self.GuardarId, item.idContacto)
-            #bnt.bind(on_press = buttoncallback)
-            #bnt.bind(on_press = self.CambiarScreen)
-            grid.add_widget(bnt)
+class DetallesEvento(Screen):
+    pass
 
-        scroll.add_widget(grid)
-
-    def AgregarEventosLista(self):
-        eventos = Evento.SelectEventoFecha('2018-12-25')
-        return eventos
 
 
 misdatos=MisDatos(name='MisDatos')
@@ -313,7 +325,7 @@ detallecontacto = DetallesContacto(name='DetallesContacto')
 nuevocontacto = NuevoContacto(name='NuevoContacto')
 contactoseditables = ContactosEditable(name='ContactosEditable')
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
-
+root.add_widget(DetallesEvento(name='DetallesEvento'))
 root.add_widget(misdatos)
 root.add_widget(MisDatosEditable(name='MisDatosEditable'))
 root.add_widget(contactos)
@@ -321,6 +333,7 @@ root.add_widget(Feriados(name='Feriados'))
 root.add_widget(nuevocontacto)
 root.add_widget(detallecontacto)
 root.add_widget(contactoseditables)
+
 
 
 class ScreenManagerApp(App):
