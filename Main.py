@@ -24,7 +24,6 @@ DB().SetConection('127.0.0.1', 'root', 'alumno', 'TP_AGENDA')
 Builder.load_file('screenmanagerapp.kv')
 agenda = Agenda.Select(1)
 root = ScreenManager()
-
 class Fecha(object):
     dia = None
     mes = None
@@ -37,26 +36,30 @@ class HojaAgenda(Screen):
         super(HojaAgenda, self).__init__(**kwargs)
         self.AgregarEvento()
     def AgregarEvento(self):
-        print(fecha_boton.dia)
-        self.eventos = self.AgregarEventosLista()
+        self.eventos = self.AgregarEventosLista(fecha_boton)
         self.ids.dia.text = str(fecha_boton.dia)
         scroll = self.ids.escrolviu
         scroll.clear_widgets()
         grid = GridLayout(cols=1, size_hint_y=30, spacing='15dp', id='GridEventos')
         for item in self.eventos:
             bnt = Button(text=item.titulo, font_size='30sp', size_hint_y=None, height=170, id=str(item.idEventos))
-            #buttoncallback = partial(self.GuardarId, item.idContacto)
-            #bnt.bind(on_press = buttoncallback)
-            #bnt.bind(on_press = self.CambiarScreen)
+            buttoncallback = partial(self.GuardarItem, item)
+            bnt.bind(on_press = buttoncallback)
             grid.add_widget(bnt)
 
         scroll.add_widget(grid)
     def SeleccionarNuevamente(self):
         self.AgregarEvento()
 
-    def AgregarEventosLista(self):
-        eventos = Evento.SelectEventoFecha('2018-12-25')
+    def AgregarEventosLista(self, fecha_boton):
+        fecha_str = str(fecha_boton.year) + '-' + str(fecha_boton.mes) + '-' + str(fecha_boton.dia)
+        eventos = Evento.SelectEventoFecha(fecha_str)
         return eventos
+    def GuardarItem(self, item, evn=None):
+        print(item.descripcion)
+        verevento.RecibirItem(item)
+        root.current = 'VerEvento'
+
 
 class Calendario(BoxLayout):
     day = NumericProperty(0)
@@ -146,6 +149,7 @@ class Calendario(BoxLayout):
 fecha = datetime.datetime.now()
 cal = Calendario(month=fecha.month, year=fecha.year,
                         size_hint=(1, 1), size=(560, 500))
+
 class PantallaGeneral(Screen):
     def __init__(self, **kwargs):
         super(PantallaGeneral, self).__init__(**kwargs)
@@ -314,23 +318,59 @@ class Feriados(Screen):
     pass
 
 class DetallesEvento(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super(DetallesEvento, self).__init__(**kwargs)
 
+    def RecibirItem(self, item):
+        self.SetearaTextInput(item)
+
+    def GuardarEvento(self):
+        texto = self.ids.t_eventos.text
+        evento = Evento()
+        evento.descripcion = texto
+        item = verevento.pasar
+        evento.UpdateDescripcion(item.idEventos)
+    def SetearaTextInput(self, item):
+        desc = Evento.SelectEvento(item.idEventos)
+        self.ids.t_eventos.text = str(desc.descripcion)
+
+class VerEvento(Screen):
+    pasar = None
+    def __init__(self, **kwargs):
+        super(VerEvento, self).__init__(**kwargs)
+
+    def RecibirItem(self, item):
+        self.RellenarLabel(item)
+        print("recibir")
+
+    def RellenarLabel(self, item):
+        desc = Evento.SelectEvento(item.idEventos)
+        self.ids.l_eventos.text = str(desc.descripcion)
+        self.pasar = item
+
+    def Pasar(self):
+        detalleeventos.RecibirItem(self.pasar)
+
+class NuevoEvento(Screen):
+    pass
 
 
 misdatos=MisDatos(name='MisDatos')
 contactos=Contactos(name='Contactos')
-
+detalleeventos = DetallesEvento(name='DetallesEvento')
 detallecontacto = DetallesContacto(name='DetallesContacto')
 nuevocontacto = NuevoContacto(name='NuevoContacto')
 contactoseditables = ContactosEditable(name='ContactosEditable')
+verevento = VerEvento(name='VerEvento')
 root.add_widget(PantallaGeneral(name='PantallaGeneral'))
-root.add_widget(DetallesEvento(name='DetallesEvento'))
+root.add_widget((NuevoEvento(name='NuevoEvento')))
+root.add_widget(detalleeventos)
 root.add_widget(misdatos)
 root.add_widget(MisDatosEditable(name='MisDatosEditable'))
 root.add_widget(contactos)
 root.add_widget(Feriados(name='Feriados'))
 root.add_widget(nuevocontacto)
+root.add_widget(verevento)
 root.add_widget(detallecontacto)
 root.add_widget(contactoseditables)
 

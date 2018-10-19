@@ -23,6 +23,9 @@ class Evento(object):
         self.tipo_evento = diccionario['tipo_evento']
         self.idEventos = diccionario['idEventos']
 
+    def DeserializarDescripcion(self, diccionario):
+        self.descripcion = diccionario['descripcion']
+
     @staticmethod
     def SelectEvento(id):
         select_cursor = DB().run("Select * from Eventos where idEventos = " + str(id) + ";")
@@ -34,12 +37,14 @@ class Evento(object):
     @staticmethod
     def SelectEventoFecha(fecha):
         lista = []
-        select_cursor = DB().run("Select * from Eventos where fecha = " + str(fecha) + ";")
+        select_cursor = DB().run("Select * from Eventos where fecha = '" + str(fecha) + "';")
         for item in select_cursor:
             evento = Evento()
             evento.DeserializarEvento(item)
             lista.append(evento)
         return lista
+
+
 
     @staticmethod
     def SeleccionarEventos():
@@ -57,3 +62,6 @@ class Evento(object):
 
     def UpdateEvento(self, id):
         DB().run("Update Eventos set titulo = '" + self.titulo + "', descripcion = '" + self.descripcion + "', fecha = '" + self.fecha + "', tipo_evento = '" + self.tipo_evento + "', idAgendas = " + str(self.idAgendas) + " where idEventos =" + str(id) + ";")
+
+    def UpdateDescripcion(self, id):
+        DB().run("Update Eventos set descripcion ='" + self.descripcion + "' where idEventos =" + str(id) + ";")
