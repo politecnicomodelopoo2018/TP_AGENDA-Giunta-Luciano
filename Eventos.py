@@ -1,18 +1,17 @@
 from DB import DB
+import datetime
 class Evento(object):
     idEventos = None
 
     titulo = None
     descripcion = None
     fecha = None
-    tipo_evento = None
     idAgendas = None
 
-    def SetEvento(self, titulo, descripcion, fecha, tipo_evento, idag):
+    def SetEvento(self, titulo, descripcion, fecha, idag):
         self.titulo = titulo
         self.descripcion = descripcion
         self.fecha = fecha
-        self.tipo_evento = tipo_evento
         self.idAgendas = idag
 
     def DeserializarEvento(self, diccionario):
@@ -20,7 +19,6 @@ class Evento(object):
         self.titulo = diccionario['titulo']
         self.descripcion = diccionario['descripcion']
         self.fecha = diccionario['fecha']
-        self.tipo_evento = diccionario['tipo_evento']
         self.idEventos = diccionario['idEventos']
 
     def DeserializarDescripcion(self, diccionario):
@@ -56,12 +54,13 @@ class Evento(object):
             lista.append(evento)
         return lista
 
-    def InsertEvento(self, titulo, descripcion, fecha, tipo_evento, idag):
-        self.SetEvento(titulo, descripcion, fecha, tipo_evento, idag)
-        insert_cursor = DB().run("Insert into Eventos values(null,'" + self.titulo + "','" + self.descripcion + "','" + self.fecha + "','" + self.tipo_evento + "', " + str(self.idAgendas) + ");")
+    def InsertEvento(self, titulo, descripcion, obj_fecha, idag):
+        date = datetime.date(obj_fecha.year, obj_fecha.mes, obj_fecha.dia)
+        self.SetEvento(titulo, descripcion, str(date), idag)
+        insert_cursor = DB().run("Insert into Eventos values(null,'" + self.titulo + "','" + self.descripcion + "','" + self.fecha + "','" + str(self.idAgendas) + "');")
 
     def UpdateEvento(self, id):
-        DB().run("Update Eventos set titulo = '" + self.titulo + "', descripcion = '" + self.descripcion + "', fecha = '" + self.fecha + "', tipo_evento = '" + self.tipo_evento + "', idAgendas = " + str(self.idAgendas) + " where idEventos =" + str(id) + ";")
+        DB().run("Update Eventos set titulo = '" + self.titulo + "', descripcion = '" + self.descripcion + "', fecha = '" + self.fecha + "', idAgendas = " + str(self.idAgendas) + " where idEventos =" + str(id) + ";")
 
     def UpdateDescripcion(self, id):
         DB().run("Update Eventos set descripcion ='" + self.descripcion + "' where idEventos =" + str(id) + ";")

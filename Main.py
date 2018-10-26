@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from kivy import kivy
 from kivy.app import App
 from DB import DB
@@ -23,12 +24,18 @@ import calendar
 DB().SetConection('127.0.0.1', 'root', 'alumno', 'TP_AGENDA')
 Builder.load_file('screenmanagerapp.kv')
 agenda = Agenda.Select(1)
+
 root = ScreenManager()
 class Fecha(object):
     dia = None
     mes = None
     year = None
 
+class GuardadoDeScreens(object):
+    screen = None
+
+hojaagenda_mundial = GuardadoDeScreens()
+hojaagenda_mundial.screen = "hola"
 fecha_boton = Fecha()
 
 class HojaAgenda(Screen):
@@ -59,6 +66,7 @@ class HojaAgenda(Screen):
         print(item.descripcion)
         verevento.RecibirItem(item)
         root.current = 'VerEvento'
+
 
 
 class Calendario(BoxLayout):
@@ -129,6 +137,7 @@ class Calendario(BoxLayout):
         self.day = int(event.text)
         fecha_boton.dia = self.day
         self.screen = HojaAgenda(name="HojaAgenda")
+        hojaagenda_mundial.screen = self.screen
         root.add_widget(self.screen)
         self.cambiarpantalla()
 
@@ -315,7 +324,7 @@ class ContactosEditable(Screen):
 
 
 class Feriados(Screen):
-    pass
+    def
 
 class DetallesEvento(Screen):
     def __init__(self, **kwargs):
@@ -332,7 +341,7 @@ class DetallesEvento(Screen):
         evento.UpdateDescripcion(item.idEventos)
     def SetearaTextInput(self, item):
         desc = Evento.SelectEvento(item.idEventos)
-        self.ids.t_eventos.text = str(desc.descripcion)
+        self.ids.t_eventos.text = desc.descripcion
 
 class VerEvento(Screen):
     pasar = None
@@ -345,14 +354,21 @@ class VerEvento(Screen):
 
     def RellenarLabel(self, item):
         desc = Evento.SelectEvento(item.idEventos)
-        self.ids.l_eventos.text = str(desc.descripcion)
+        self.ids.l_eventos.text = desc.descripcion
         self.pasar = item
 
     def Pasar(self):
         detalleeventos.RecibirItem(self.pasar)
 
 class NuevoEvento(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super(NuevoEvento, self).__init__(**kwargs)
+    def GuardarEvento(self):
+        nuevoevento = Evento()
+        titulo = self.ids.t_titulo_eventos.text
+        desc = self.ids.t_desc_eventos.text
+        nuevoevento.InsertEvento(titulo, desc, fecha_boton, agenda.id)
+        hojaagenda_mundial.screen.AgregarEvento()
 
 
 misdatos=MisDatos(name='MisDatos')
