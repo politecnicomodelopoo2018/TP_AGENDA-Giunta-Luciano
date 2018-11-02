@@ -51,7 +51,7 @@ class Feriado(object):
             feriado.DeserializarFeriado(item)
             lista.append(feriado)
         return lista
-    def InsertEvento(self, titulo, obj_fecha, descripcion, pais, idag):
+    def InsertFeriado(self, titulo, obj_fecha, descripcion, pais, idag):
         date = datetime.date(obj_fecha.year, obj_fecha.mes, obj_fecha.dia)
         self.SetFeriado(titulo, str(date), descripcion, idag)
         mes = obj_fecha.mes
@@ -60,3 +60,4 @@ class Feriado(object):
     def UpdateFeriado(self, id, obj_fecha):
         date = datetime.date(obj_fecha.year, obj_fecha.mes, obj_fecha.dia)
         DB().run("Update Eventos set titulo = '" + self.titulo + "', fecha = '" + date + "', descripcion = '" + self.descripcion + "', pais = "'' + str(self.pais) + "', idAgendas = " + str(self.idAgendas) + ", mes = '"+ obj_fecha.mes + "' where idEventos =" + str(id) + ";")
+

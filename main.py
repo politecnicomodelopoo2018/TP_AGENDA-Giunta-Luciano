@@ -21,7 +21,7 @@ from kivy.uix.screenmanager import FallOutTransition
 import datetime
 import calendar
 
-DB().SetConection('localhost', 'root', '', 'TP_AGENDA')
+DB().SetConection('127.0.0.1', 'root', 'alumno', 'TP_AGENDA')
 Builder.load_file('screenmanagerapp.kv')
 agenda = Agenda.Select(1)
 
@@ -354,6 +354,7 @@ class VerEvento(Screen):
     def Pasar(self):
         detalleeventos.RecibirItem(self.pasar)
 
+
 class NuevoEvento(Screen):
     def __init__(self, **kwargs):
         super(NuevoEvento, self).__init__(**kwargs)
@@ -381,9 +382,7 @@ class Feriados(Screen):
         scroll.clear_widgets()
         grid = GridLayout(cols=3, size_hint_y=30, spacing='15dp', id='GridDelScroll')
         for item in self.feriados:
-            lbl = Label(text=str(str(item.fecha) + " - " + item.titulo + ": " + item.descripcion), font_size='30sp', size_hint_y=None, height=170, id=str(item.idFeriado))
-
-
+            lbl = Label(text=(str(item.fecha) + " - " + item.titulo + ": " + item.descripcion), font_size='30sp', size_hint_y=None, height=170, id=str(item.idFeriado))
             grid.add_widget(lbl)
         scroll.add_widget(grid)
 

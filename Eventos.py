@@ -67,4 +67,6 @@ class Evento(object):
 
     @staticmethod
     def BorrarEvento(id):
-        DB().run("Delete from Eventos where idEventos =" + str(id) + ";")
+        if id != None:
+            print(id)
+            DB().run("Delete from Eventos where idEventos =" + str(id) + ";")
