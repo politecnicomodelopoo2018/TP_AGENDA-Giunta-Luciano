@@ -64,3 +64,7 @@ class Evento(object):
 
     def UpdateDescripcion(self, id):
         DB().run("Update Eventos set descripcion ='" + self.descripcion + "' where idEventos =" + str(id) + ";")
+
+    @staticmethod
+    def BorrarEvento(id):
+        DB().run("Delete from Eventos where idEventos =" + str(id) + ";")

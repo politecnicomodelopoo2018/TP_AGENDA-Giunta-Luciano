@@ -247,85 +247,6 @@
                     size_hint: 1,.8
                     multiline: True
 
-<VerEvento>
-    canvas:
-        Color:
-            rgb: 1,1,1
-        Rectangle:
-            size: self.size
-            pos: self.pos
-    GridLayout: #Grid que separa encabezado y body
-        rows: 2
-        GridLayout: #Grid que separa boton de titulo
-            size_hint_x:1
-            size_hint_y:.2
-            cols:2
-            AnchorLayout: #Anchor del boton
-                anchor_x: "left"
-                anchor_y: "top"
-                padding: 20,20,20,20
-                size_hint_x: .2
-                size_hint_y: 1
-                canvas:
-                    Color:
-                        rgb: 1,0,0
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-                Button: #Volver a Contactos
-                    id: volver_contactos1
-                    text: "Volver!!!"
-                    size_hint_x: 1
-                    size_hint_y: 1
-                    on_release: root.manager.current = 'HojaAgenda'
-
-            BoxLayout: #Box del titulo
-                canvas:
-                    Color:
-                        rgb: 1,0,0
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-                GridLayout:
-                    cols:2
-                    Label: #Titulo
-                        id: label_nuevocontacto
-                        size: root.size
-                        text_size: cm(15), cm(2)
-                        font_size:'60sp'
-                    BoxLayout:
-                        Button: #Volver a Contactos
-                            id: guardar_texto_eventos
-                            text: "Guardar"
-                            size_hint_x: 1
-                            size_hint_y: 1
-                            on_release: root.Pasar()
-                            on_release: root.manager.current = "DetallesEvento"
-        BoxLayout: #Box con Tareas
-            size_hint_x:1
-            size_hint_y:.7
-            padding: 20,20,20,20
-            canvas:
-                Color:
-                    rgb: 0,0,0
-                Rectangle:
-                    size: self.size
-                    pos: self.pos
-            GridLayout:
-                rows: 3
-                TextInput:
-                    id: l_eventos
-                    size_hint: 1,1
-                    multiline: True
-                TextInput:
-                    id: l_eventos
-                    size_hint: 1,1
-                    multiline: True
-                TextInput:
-                    id: l_eventos
-                    size_hint: 1,1
-                    multiline: True
-
 <DetallesEvento>
     canvas:
         Color:
@@ -1072,12 +993,11 @@
                 Label: #Titulo
                     id: label_contacto
                     size: root.size
-                    text: "CONTACTOS"
+                    text: "FERIADOS"
                     text_size: cm(15), cm(2)
                     font_size:'60sp'
         GridLayout:
-            rows: 4
-            cols: 3
+            rows: 2
             padding: 20,20,20,20
             canvas:
                 Color:
@@ -1085,42 +1005,23 @@
                 Rectangle:
                     size: self.size
                     pos: self.pos
-            Button:
-                id: Enero
-                text: 'Enero'
-            Button:
-                id: Febrero
-                text: 'Febrero'
-            Button:
-                id: Marzo
-                text: 'Marzo'
-            Button:
-                id: Abril
-                text: 'Abril'
-            Button:
-                id: Mayo
-                text: 'Mayo'
-            Button:
-                id: Junio
-                text: 'Junio'
-            Button:
-                id: Julio
-                text: 'Julio'
-            Button:
-                id: Agosto
-                text: 'Agosto'
-            Button:
-                id: Septiembre
-                text: 'Septiembre'
-            Button:
-                id: Octubre
-                text: 'Octubre'
-            Button:
-                id: Noviembre
-                text: 'Noviembre'
-            Button:
-                id: Diciembre
-                text: 'Diciembre'
+            GridLayout:
+                size_hint_y: .3
+                cols:2
+                spacing: '20dp'
+                ScrollView:
+                    size_hint_y: .7
+                    id: scrollview
+                    canvas.before:
+                        Color:
+                            rgb: 0, 0, 0
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+
+<NuevoFeriado>
+
 <NuevoContacto>
     canvas:
         Color:

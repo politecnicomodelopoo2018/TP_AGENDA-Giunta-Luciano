@@ -1,11 +1,11 @@
 from DB import DB
 import datetime
 
-class Feriados(object):
+class Feriado(object):
     idFeriado = None
-    Titulo = None
-    Fecha = None
-    Descripcion = None
+    titulo = None
+    fecha = None
+    descripcion = None
     pais = None
 
     def SetFeriado(self, idFeriado, titulo, fecha, descripcion, pais):
@@ -14,7 +14,6 @@ class Feriados(object):
         self.fecha = fecha
         self.titulo = titulo
         self.pais = pais
-
     def DeserializarFeriado(self, diccionario):
         self.idFeriado = diccionario['idFeriados']
         self.descripcion = diccionario['descripcion']
@@ -34,34 +33,30 @@ class Feriados(object):
         return feriado
 
     @staticmethod
-    def SelectFeriadoFecha(fecha):
+    def SelectFeriadoMes(mes):
         lista = []
-        select_cursor = DB().run("Select * from Feriados where fecha = '" + str(fecha) + "';")
+        select_cursor = DB().run("Select * from Feriados where mes = '" + str(mes) + "';")
         for item in select_cursor:
             feriado = Feriados()
             feriado.DeserializarFeriado(item)
             lista.append(feriado)
         return lista
-
-
 
     @staticmethod
     def SeleccionarFeriados():
         lista = []
         select_cursor = DB().run("Select * from Feriados;")
         for item in select_cursor:
-            feriado = Feriados()
+            feriado = Feriado()
             feriado.DeserializarFeriado(item)
             lista.append(feriado)
         return lista
-
-    def InsertEvento(self, titulo, descripcion, obj_fecha, idag):
+    def InsertEvento(self, titulo, obj_fecha, descripcion, pais, idag):
         date = datetime.date(obj_fecha.year, obj_fecha.mes, obj_fecha.dia)
-        self.SetFeriado(titulo, descripcion, str(date), idag)
-        insert_cursor = DB().run("Insert into Feriados values(null,'" + self.titulo + "','" + self.fecha + "','" + self.descripcion + "','" + str(self.idAgendas) + "');")
+        self.SetFeriado(titulo, str(date), descripcion, idag)
+        mes = obj_fecha.mes
+        insert_cursor = DB().run("Insert into Feriados values(null,'" + self.titulo + "','" + self.fecha + "','" + self.descripcion + "','" + self.pais + "'," + str(self.idAgendas) + "'," + mes + "');")
 
-    def UpdateEvento(self, id):
-        DB().run("Update Eventos set titulo = '" + self.titulo + "', descripcion = '" + self.descripcion + "', fecha = '" + self.fecha + "', idAgendas = " + str(self.idAgendas) + " where idEventos =" + str(id) + ";")
-
-    def UpdateDescripcion(self, id):
-        DB().run("Update Eventos set descripcion ='" + self.descripcion + "' where idEventos =" + str(id) + ";")
+    def UpdateFeriado(self, id, obj_fecha):
+        date = datetime.date(obj_fecha.year, obj_fecha.mes, obj_fecha.dia)
+        DB().run("Update Eventos set titulo = '" + self.titulo + "', fecha = '" + date + "', descripcion = '" + self.descripcion + "', pais = "'' + str(self.pais) + "', idAgendas = " + str(self.idAgendas) + ", mes = '"+ obj_fecha.mes + "' where idEventos =" + str(id) + ";")
